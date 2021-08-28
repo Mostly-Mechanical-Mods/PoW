@@ -1,0 +1,3 @@
+﻿get_days_in_prison = {
+	value = days_in_prison
+}

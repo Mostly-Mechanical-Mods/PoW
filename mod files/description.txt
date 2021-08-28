@@ -1,0 +1,83 @@
+Long gone are the days when prisoners teleported from a siege location deep in enemy territory to your own dungeons !
+
+With [b]Prisoners of War[/b], characters imprisoned in battle, raids and sieges will be tied to the army that captured them, until that army reaches friendly territory, and prisoners are transfered to the dungeon. Should the army be defeated in battle before that happens, prisoners will be either liberated, or transfered to the army of their new jailor.
+
+
+[b]Prisoners of War[/b] is a [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2511250933][b]Mostly Mechanical Mod[/b][/url]
+[i]The mod is not Ironman compatible[/i], but is savegame compatible.
+
+
+[b]Prisoners of War[/b] adds a new layer of tactical choices : should you siege back your holding to negate the warscore from its occupation, or should your chase down the army that's taking away your heir, in the hope of liberating it before his capture can be leveraged in a call for peace ?
+
+An icon has been added to units transporting prisoners, and the army tooltip shows the number of prisoners currently present in the army, as well as the list in a nested tooltip.
+The Prison screen also shows by which army prisoners have been taken, and the background now reflects the current status of the army transporting each prisoner (moving, sieging, embarked, etc)
+
+[b]Disclaimer - this mod is playable, but is still very much a work in progress[/b]
+
+The base mechanic is functionnal enough that I feel the mod can be released in the current state.
+However, as modders currently do not have a lot of means to react in real time to army events, there are some workarounds that are a bit precarious, and could cause issues.
+There are also a lot of debug_log in the script that might cause slowdowns, but are very useful at the moment to iron out edge cases where the mod does not work as intended.
+
+As to not be disappointed, I would encourage you to expect to encounter bugs !
+If you do, please consider reporting them on  [url=https://steamcommunity.com/linkfilter/?url=https://discord.gg/pY9vRssJ][b]our discord ![/b][/url] =)
+
+
+[h1]Credits[/h1]
+
+This mod benefited from the invaluable help of the CK3 Mod Co-op.
+All remaining bugs are my own.
+
+[h1]Changelog[/h1]
+
+Hotfix 0.1.4
+
+# Languages
+- now available in German thanks to mxlte !
+
+# Features
+- PoWs can now be released, but with no counterpart (no hook, conversion, recruitment, etc)
+- PoWs can now be ransomed if the army holding them is not raiding, and if the army is in a county held by the recipient willing to pay the ransom offer, as long as the prisoner isn't a bargaining chip in an on-going war
+- PoWs can now be executed whenever
+
+Hotfix 0.1.3
+
+# Languages
+- now available in Chinese thanks to Juijote !
+
+# Bugs
+- corrected a bug preventing the fallback on armies merged to trigger correctly. Now when an army disappears, if other armies of the same owner are present on the same province, prisoners are picked up on the next day.
+- corrected a bug showing in the army prisoners that were captured on war end by the winner as part of the war resolution, when the character that captured them in the first place were not the primary participant in the war
+- somehow seemingly unintentionnaly corrected the bug that made prisoners go to dungeon on raiding party stackwipe, but I still count that as a win
+
+# Features
+- clicking the Disband button on the army window now instantly sends all prisoners to the dungeon, even if the disband is not confirmed in the dialog window
+- clicking the Merge button on the army window now sends all prisoners of all armies in the province to the selected army, even prisoners that were in armies not being merged - that's the only way I can handle this for the time being
+
+# Interface
+- new PoW icon on the army window, showing the number of prisoners in the army, with the list in tooltip, and the number of days since capture (by the 1st army that captured them)
+
+Hotfix 0.1.2
+
+# Bugs
+- fixed a minor bug that did not actually break anything, but that printed *a lot* of errors, making tracking actual bugs that much more difficult. If you must know, it had to do with mutliple on_actions being fired at the same time, and their triggers being assessed simultaneously, but their effects being executed after both triggers' assessment. So if the effect of one modifies the trigger conditions of the other... yeah, *I know*
+- added a check on war end for cleaning up of PoWs liberated when war ends, and for transferring PoWs to the dungeon
+- Fixed the bug that made the launcher warn against mod not being compatible with 1.4.0, because the descriptor.mod said 'supported_version="1.4"'. Literally unplayable.
+
+Hotfix 0.1.1
+
+# Bug
+- Hopefully resolved the bug that caused random crashes when launching the game, before it reached the main menu
+
+version 0.1.0
+
+# Features
+- On capture, prisoners are held by the army that captured them, until such a time as either :
+* the prisoner dies
+* the army is defeated in battle, in which case prisoners are either liberated, or transfered to the new army
+* the army gets back to friendly territory, in which case prisoners are transfered to the dungeons
+* the army disappears for a number of reasons, in which case the mod tries to guess from context if it was merged, disbanded, died from attrition, or removed from the game for other reasons, and reacts as appropriately as it can
+
+# UI
+- Adapted the Prison screen to reflect the status of PoWs being transported in an army, with the army name, its current location, and a background that reflects the army status
+- Added icons to the Unit models on the map, to show which armies are currently holding prisoners
+- Added the number of PoWs held by an army in the army tooltip, as well as a nested tooltip with the list of PoWs

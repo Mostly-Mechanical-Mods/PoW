@@ -1,0 +1,5 @@
+﻿# Vassals
+captured_PoW = {
+	base = prisoner
+	conditions = { is_in_prison_type = prisoner_of_war }
+}

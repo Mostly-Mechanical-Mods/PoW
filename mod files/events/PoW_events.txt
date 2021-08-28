@@ -1,0 +1,83 @@
+﻿namespace = PoW_event
+
+PoW_event.0001 = {
+	type = empty
+	hidden = yes
+
+	immediate = {
+		# Check for characters that might have been liberated on war over, and erase them from the story_PoW_list
+		# End story if story size drops down to 0
+		war = {
+			every_war_participant = {			
+				limit = { owns_story_of_type = story_PoW }
+				debug_log = "PoW war participant"
+				debug_log_scopes = no
+				every_owned_story = {
+					limit = {
+						story_type = story_PoW
+						exists = var:story_army
+						var:story_army = { is_raid_army = no }
+						is_hostile_army_nearby = no
+					}
+					var:story_army = { debug_log_scopes = no }
+					every_in_list = {
+						variable = story_PoW_list
+						limit = { NOT = { is_imprisoned_by = PREV.story_owner }}
+						debug_log = "PoW liberated on war end ?"
+						debug_log_scopes = no
+						PREV = {
+							remove_list_variable = {
+								name = story_PoW_list
+								target = PREV
+							}
+						}
+						remove_variable = story_PoW
+					}
+					if = {
+						limit = {
+							OR = {
+								NOT = { has_variable_list = story_PoW_list }
+								variable_list_size = {
+									name = story_PoW_list
+									value = 0
+								}
+							}
+						}
+						end_story = yes
+					}
+				}
+			}
+			# If participant not in another war, army not raiding, and no hostiles around, send PoWs to dungeon and end story
+			every_war_participant = {
+				limit = {
+					owns_story_of_type = story_PoW
+					is_at_war = no
+				}
+				debug_log = "PoW war participant not at war"
+				debug_log_scopes = no
+				every_owned_story = {
+					limit = {
+						story_type = story_PoW
+						exists = var:story_army
+						var:story_army = { is_raid_army = no }
+						is_hostile_army_nearby = no
+					}
+					var:story_army = { debug_log_scopes = no }
+					every_in_list = {
+						if = {
+							limit = { is_imprisoned = no }
+							debug_log = "PoW not imprisoned"
+						}
+						variable = story_PoW_list
+						debug_log_scopes = no
+						change_prison_type = dungeon
+						remove_variable = story_PoW
+					}
+					scope:army = { remove_variable = story_PoW }
+					end_story = yes
+				}
+			}
+		}
+	}
+}
+			

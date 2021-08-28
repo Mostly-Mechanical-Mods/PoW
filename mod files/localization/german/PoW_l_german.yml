@@ -1,0 +1,9 @@
+﻿l_german:
+
+  prisontype_pow: "Gefangene des Krieges"
+  POW_CAPTUREDBY: "Gefangen von [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]\nLocation : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_CAPTUREDBY_SHORT: "Gefangen von [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]"
+  POW_LOCATION: "Aufenthaltsort : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_NB_IN_UNIT: "Gefangene in meiner Armee : [GetDataModelSize(UnitItem.GetArmy.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  POW_NB_IN_ARMY: "Gefangene in meiner Armee : [GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  CAPTURED_FOR: "[Character.MakeScope.ScriptValue('get_days_in_prison')|0] Tagen"

@@ -1,0 +1,26 @@
+﻿PoW_army_is_raiding = {
+	third_not = ARMY_IS_RAIDING
+}
+
+# PoW_army_not_in_a_holding_of = {
+# 	third_not = ARMY_IN_WRONG_LOCATION
+# }
+
+PoW_army_location_owner_is = {
+	first_not = ARMY_IN_WRONG_LOCATION_FIRST
+	# first = ARMY_IN_WRONG_LOCATION_FIRST
+	third_not = ARMY_IN_WRONG_LOCATION
+}
+
+PoW_is_not_bargaining_chip = {
+	third = POW_IS_NOT_BARGAINING_CHIP
+	third_not = POW_IS_BARGAINING_CHIP
+}
+
+PoW_army_on_land = {
+	third_not = ARMY_AT_SEA
+}
+
+PoW_army_not_fighting = {
+	third_not = ARMY_IN_COMBAT
+}

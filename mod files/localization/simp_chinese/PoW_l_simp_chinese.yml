@@ -1,0 +1,7 @@
+﻿l_simp_chinese:
+  prisontype_pow: "战俘"
+  POW_CAPTUREDBY: "被[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]俘获\n位置：[Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_CAPTUREDBY_SHORT: "被[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]俘获"
+  POW_LOCATION: "位置：[Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_NB_IN_UNIT: "军队中的战俘：[GetDataModelSize(UnitItem.GetArmy.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  POW_NB_IN_ARMY: "军队中的战俘：[GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"

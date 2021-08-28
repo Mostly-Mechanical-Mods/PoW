@@ -1,0 +1,279 @@
+######################################################
+############## LIST TYPES AND TEMPLATES ##############
+######################################################
+
+types Lists
+{
+
+	type widget_courtier_PoW_item = widget {
+		size = { 0 125 }
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			margin_right = 10
+			spacing = 5
+
+			background = {
+				using = Background_Area_With_Header
+			}
+
+			portrait_head = {}
+
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				margin_top = 3
+
+				hbox = {
+					layoutpolicy_horizontal = expanding
+
+					text_single = {
+						name = "name"
+						layoutpolicy_horizontal = expanding
+						autoresize = no
+						text = "[Character.GetUINameNoTooltip]"
+						using = Font_Size_Medium
+						align = nobaseline
+						fontsize_min = 14
+						margin_right = 10
+					}
+
+					hbox_skills_grid = {}
+				}
+
+				vbox = {
+					layoutpolicy_horizontal = expanding
+					margin = { 0 3 }
+					margin_bottom = 8
+
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						spacing = 3
+
+						icon = {
+							visible = "[Character.CourtierWantsToLeaveCourt]"
+							size = { 20 20 }
+							texture = "gfx/interface/icons/symbols/icon_warning.dds"
+							tooltip = "[Character.GetCourtierLeaveDescription]"
+						}
+
+						debug_placeholder = {
+							visible = "[InDebugMode]"
+							size = { 20 20 }
+							tooltip = "#D [Character.GetDebugCourtierLeaveReasons]#!"
+						}
+
+						text_single = {
+							name = "relation_to_court_owner"
+							layoutpolicy_horizontal = expanding
+							default_format = "#low"
+							autoresize = no
+							align = nobaseline
+
+							block "description_relation_text" {
+								text = "[Character.GetRelationToString( CharacterWindow.GetCourtOwner )]"
+							}
+
+							background = {
+								visible = "[Character.IsImprisoned]"
+								using = Status_Bad
+								alpha = 0.5
+							}
+						}
+
+						expand = {}
+					}
+				}
+
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					spacing = 5
+					margin_bottom = 5
+
+					block "action_buttons"
+					{
+						hbox = {
+							margin = { 0 3 }
+							spacing = 5
+
+							button_round = {
+								visible = "[Character.IsPlayerInteractionShown('recruit_guest_interaction')]"
+								enabled = "[Character.IsPlayerInteractionValid('recruit_guest_interaction')]"
+								onclick = "[Character.OpenPlayerInteraction('recruit_guest_interaction')]"
+								tooltip = "[Character.GetPlayerInteractionTooltip('recruit_guest_interaction')]"
+
+								button_add_character = {
+									alwaystransparent = yes
+									parentanchor = center
+								}
+							}
+						}
+					}
+
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						minimumsize = { 0 60 }
+						margin_left = 5
+
+						background = {
+							using = Background_Area_Dark
+							margin = { 3 3 }
+							alpha = 0.5
+						}
+
+						# Dynasty
+						widget = {
+							layoutpolicy_vertical = expanding
+							size = { 45 40 }
+
+							coa_house_small = {
+								datacontext = "[Character.GetHouse]"
+								parentanchor = center
+								scale = 0.7
+							}
+						}
+
+						# Traits
+						vbox = {
+							layoutpolicy_vertical = expanding
+							margin = { 10 0 }
+
+							hbox = {
+								layoutpolicy_horizontal = expanding
+
+								fixedgridbox = {
+									name = "traits_grid_four"
+									datamodel = "[CharacterListItem.GetTraits]"
+									flipdirection = yes
+									addcolumn = 30
+									addrow = 28
+									visible = "[Not( IsDataModelEmpty( CharacterListItem.GetTitleItems ) )]"
+
+									block "gridbox_items"   ### for characterview
+									{
+										datamodel_wrap = 4
+										maxverticalslots = 2
+									}
+
+									item = {
+										icon_trait = {
+											visible = "[Trait.IsValid]"
+
+											blockoverride "icon_size"
+											{
+												size = { 30 30 }
+											}
+
+											blockoverride "tooltip_placement"
+											{
+												using = tooltip_se
+											}
+
+											blockoverride "glow_radius"
+											{
+												glow_radius = 3
+											}
+										}
+									}
+								}
+																fixedgridbox = {
+									name = "traits_grid_five"
+									datamodel = "[CharacterListItem.GetTraits]"
+									flipdirection = yes
+									addcolumn = 30
+									addrow = 28
+									visible = "[IsDataModelEmpty( CharacterListItem.GetTitleItems )]"
+
+									block "gridbox_items"   ### for characterview
+									{
+										datamodel_wrap = 5
+										maxverticalslots = 2
+									}
+
+									item = {
+										icon_trait = {
+											visible = "[Trait.IsValid]"
+
+											blockoverride "icon_size"
+											{
+												size = { 30 30 }
+											}
+
+											blockoverride "tooltip_placement"
+											{
+												using = tooltip_se
+											}
+
+											blockoverride "glow_radius"
+											{
+												glow_radius = 3
+											}
+										}
+									}
+								}
+
+								expand = {}
+							}
+						}
+
+						expand = {}
+
+						divider_light = {
+							layoutpolicy_vertical = expanding
+							alpha = 0.5
+						}
+
+						hbox = {
+							margin = { 3 0 }
+
+							widget_list_claims = {
+								visible = "[Not( IsDataModelEmpty( CharacterListItem.GetTitleItems ) )]"
+							}
+						}
+
+						divider_light = {
+							visible = "[Not( IsDataModelEmpty( CharacterListItem.GetTitleItems ) )]"
+							layoutpolicy_vertical = expanding
+							alpha = 0.5
+						}
+
+						hbox = {
+							margin_right = 5
+							
+							button_religion_icon = {
+								datacontext = "[Character.GetFaith]"
+								size = { 40 40 }
+							}
+
+							vbox = {
+								datacontext = "[Character.GetCulture]"
+
+								tooltipwidget = {
+									culture_tooltip = {}
+								}
+								using = tooltip_se
+
+								icon = {
+									name = "culture"
+									texture = "gfx/interface/icons/icon_culture.dds"
+									size = { 24 24 }
+								}
+
+								text_single = {
+									layoutpolicy_horizontal = expanding
+									min_width = 60
+									align = center|nobaseline
+									autoresize = no
+									text = "CULTURE_LISTS_WINDOW"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+}
+

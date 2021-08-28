@@ -1,0 +1,29 @@
+﻿enemy_army_nearby_debug = {
+	save_temporary_scope_as = local_army
+	army_owner = {
+		every_war_enemy = {
+			debug_log = "war_enemy"
+			debug_log_scopes = no
+			every_army = {
+				debug_log = "enemy_army"
+				debug_log_scopes = no
+				location.county = {
+					debug_log = "enemy_army_location"
+					debug_log_scopes = no
+					every_neighboring_county = {
+						debug_log = "neighbouring_county"
+						debug_log_scopes = no
+					}
+				}
+			}
+		}
+	}
+}
+
+test = {
+	imprison = {
+		target = this
+		type = dungeon
+	}	
+}
+
