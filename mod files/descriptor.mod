@@ -5,5 +5,5 @@ tags={
 	"Balance"
 }
 name="Prisoners of War"
-supported_version="1.4.0"
+supported_version="1.4.4"
 remote_file_id="2511247871"

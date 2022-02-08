@@ -1,14 +1,4 @@
-﻿on_game_start_after_lobby = { on_actions = { on_game_start_PoW }}
-on_game_start_PoW = {
-	effect = {
-		set_global_variable = {
-			name = mod_PoW_active
-			value = yes
-		}
-	}
-}
-
-# called for armies whenever they enter a province
+﻿# called for armies whenever they enter a province
 # root is the owner of the army
 # scope:army is the army
 on_army_enter_province = {
