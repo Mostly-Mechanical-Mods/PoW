@@ -1,0 +1,18 @@
+﻿l_english:
+
+  prisontype_pow: "Prisonnier de Guerre"
+  POW_CAPTUREDBY: "Capturé par [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]\nLocation : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_CAPTUREDBY_SHORT: "Capturé par [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]"
+  POW_LOCATION: "Location : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_NB_IN_UNIT: "Prisonniers dans l'armée : [GetDataModelSize(UnitItem.GetArmy.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  POW_NB_IN_ARMY: "Prisonniers dans l'armée : [GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  CAPTURED_FOR: "depuis [Character.MakeScope.ScriptValue('get_days_in_prison')|0] jours"
+
+  ARMY_IS_RAIDING: "[CHARACTER.GetName] est détenu par [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], en raid"
+  ARMY_IN_COMBAT: "est détenu par [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], en combat"
+  ARMY_AT_SEA: "est détenu par [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], en mer à [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetLocation.GetName]"
+  ARMY_IN_WRONG_LOCATION: "est détenu par [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], situé à [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName], que [CHARACTER.GetName], qui paierait la rançon, no possède pas"
+  ARMY_IN_WRONG_LOCATION_FIRST: "est détenu par [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], situé à[TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName], que tu ne possèdes pas"
+  POW_IS_BARGAINING_CHIP: "[CHARACTER.GetNameNoTooltip] est un acteur important de la guerre contre [TARGET_CHARACTER.GetName]"
+
+  POW_CAPTURED_FROM: "Capturé de [Character.GetLiege.GetName]"

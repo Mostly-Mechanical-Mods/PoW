@@ -9,12 +9,12 @@ types Lists
 		size = { 0 125 }
 
 		hbox = {
-			layoutpolicy_horizontal = expanding
-			margin_right = 10
 			spacing = 5
 
 			background = {
 				using = Background_Area_With_Header
+				margin_right = 7
+				margin_left = 5
 			}
 
 			portrait_head = {}
@@ -50,17 +50,16 @@ types Lists
 						layoutpolicy_horizontal = expanding
 						spacing = 3
 
-						icon = {
-							visible = "[Character.CourtierWantsToLeaveCourt]"
+						warning_icon = {
+							visible = "[And( Character.CourtierWantsToLeaveCourt, Not( Character.IsImprisoned))]"
 							size = { 20 20 }
-							texture = "gfx/interface/icons/symbols/icon_warning.dds"
 							tooltip = "[Character.GetCourtierLeaveDescription]"
 						}
 
 						debug_placeholder = {
 							visible = "[InDebugMode]"
 							size = { 20 20 }
-							tooltip = "#D [Character.GetDebugCourtierLeaveReasons]#!"
+							raw_tooltip = "#D [Character.GetDebugCourtierLeaveReasons]#!"
 						}
 
 						text_single = {
@@ -72,6 +71,7 @@ types Lists
 
 							block "description_relation_text" {
 								text = "[Character.GetRelationToString( CharacterWindow.GetCourtOwner )]"
+								tooltip = "EXTENDED_RELATIONS_TOOLTIP"
 							}
 
 							background = {
@@ -177,7 +177,7 @@ types Lists
 										}
 									}
 								}
-																fixedgridbox = {
+								fixedgridbox = {
 									name = "traits_grid_five"
 									datamodel = "[CharacterListItem.GetTraits]"
 									flipdirection = yes
@@ -240,7 +240,7 @@ types Lists
 
 						hbox = {
 							margin_right = 5
-							
+
 							button_religion_icon = {
 								datacontext = "[Character.GetFaith]"
 								size = { 40 40 }
