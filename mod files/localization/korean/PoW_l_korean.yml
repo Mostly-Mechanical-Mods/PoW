@@ -1,0 +1,18 @@
+﻿l_korean:
+
+  prisontype_pow: "전쟁 포로"
+  POW_CAPTUREDBY: "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]에 의해 사로잡힘\n[Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]에서 포로가 됨"
+  POW_CAPTUREDBY_SHORT: "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]에게 사로잡힘"
+  POW_LOCATION: "[Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]에서 포로가 됨"
+  POW_NB_IN_UNIT: "부대 내 포로 : [GetDataModelSize(UnitItem.GetArmy.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  POW_NB_IN_ARMY: "부대 내 포로 : [GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  CAPTURED_FOR: "사로잡힌 지 [Character.MakeScope.ScriptValue('get_days_in_prison')|0]일 경과"
+
+  ARMY_IS_RAIDING: "[CHARACTER.GetName]이 약탈중인 [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]부대에 사로잡혀 있습니다"
+  ARMY_IN_COMBAT: "전투 중인 [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]부대에 사로잡혀 있습니다"
+  ARMY_AT_SEA: "[CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetLocation.GetName]에 위치한 [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]부대에 사로잡혀 있습니다"
+  ARMY_IN_WRONG_LOCATION: "포로 비용을 지불할 수 있는 [CHARACTER.GetName]가 소유한 영토가 아닌, [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName]에 위치한 [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]부대에 사로잡혀 있습니다"
+  ARMY_IN_WRONG_LOCATION_FIRST: "당신의 영토가 아닌 [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName]에 위치한 [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]부대에 사로잡혀 있습니다"
+  POW_IS_BARGAINING_CHIP: "[TARGET_CHARACTER.GetName]과의 전쟁에서 중요한 협상 카드는 [CHARACTER.GetNameNoTooltip]입니다"
+
+  POW_CAPTURED_FROM: "[Character.GetLiege.GetName]에서 사로잡힘"
