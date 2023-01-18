@@ -2,11 +2,11 @@
 # A lite version of imprison_character_effect without opinion penalties or other consequences (as they were captured in war, not at your command)
 # [PoW]
 # scope:PoW_army needed
-PoW_capture_effect = {
+prisoner_of_war_capture_effect = {
 	$TARGET$ = { save_temporary_scope_as = PoW_target }
 	$IMPRISONER$ = { save_temporary_scope_as = PoW_imprisoner }
 	$LOCATION$ = { save_temporary_scope_as = PoW_battle_loc }
-	debug_log = "dbg_log PoW_capture_effect"
+	debug_log = "dbg_log prisoner_of_war_capture_effect"
 	scope:PoW_imprisoner = { debug_log_scopes = no }
 	scope:PoW_target = { debug_log_scopes = no }
 	scope:PoW_battle_loc = { debug_log_scopes = no }

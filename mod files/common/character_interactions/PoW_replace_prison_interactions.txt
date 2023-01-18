@@ -47,8 +47,8 @@ pay_ransom_interaction = {
 			PAYER = scope:actor
 		}
 		# [/PoW]
-		scope:recipient = { is_diplomatically_available = yes } #Imprisoner
-		scope:secondary_recipient = { is_diplomatically_available = yes } #Prisoner
+		scope:recipient = { is_busy_in_events_localised = yes } #Imprisoner
+		scope:secondary_recipient = { is_busy_in_events_localised = yes } #Prisoner
 		scope:recipient = {
 			custom_description = {
 				text = "currently_being_tortured"
@@ -624,8 +624,8 @@ ransom_me_interaction = {
 			PAYER = scope:actor
 		}
 		# [/PoW]
-		scope:recipient = { is_diplomatically_available = yes } #Imprisoner
-		scope:actor = { is_diplomatically_available = yes } #Prisoner
+		scope:recipient = { is_busy_in_events_localised = yes } #Imprisoner
+		scope:actor = { is_busy_in_events_localised = yes } #Prisoner
 		scope:recipient = {
 			custom_description = {
 				text = "currently_being_tortured"
@@ -974,6 +974,27 @@ ransom_me_interaction = {
 			}
 			desc = COWED_REASON
 		}
+		modifier = { # Family Feud
+			add = -50
+			trigger = {
+				exists = scope:actor.house
+				exists = scope:recipient.house
+				scope:recipient = {
+					house.house_head = {
+						any_owned_story = {
+							story_type = story_cycle_house_feud
+							has_variable = house_feud_house
+							var:house_feud_house = scope:actor.house
+						}
+					}
+					has_opinion_modifier = {
+						modifier = house_feud_opinion
+						target = scope:actor.house.house_head
+					}
+				}
+			}
+			desc = INTERACTION_FAMILY_FEUD_REVERSE_REASON
+		}
 	}
 
 	auto_accept = {
@@ -1126,7 +1147,7 @@ release_from_prison_interaction = {
 	}
 
 	is_valid_showing_failures_only = {
-		scope:recipient = { is_diplomatically_available = yes } #Prisoner
+		scope:recipient = { is_busy_in_events_localised = yes } #Prisoner
 		scope:recipient = {
 			custom_description = {
 				text = "currently_being_tortured"
@@ -1226,6 +1247,9 @@ release_from_prison_interaction = {
 					if = {
 						limit = {
 							this.gold > 0
+							NOT = {
+								has_character_flag = realm_priest
+							}
 						}
 						pay_short_term_gold = { target = scope:actor gold = this.gold }
 					}
@@ -1864,14 +1888,19 @@ release_from_prison_interaction = {
 				NOT = { employs_court_position = executioner_court_position }
 			}
 			scope:recipient = {
-				OR = {
-					is_courtier_of = scope:actor
+				trigger_if =
+				{
+					limit = { scope:recruit = yes }
 					custom_description = {
 						text = "release_executioner_invalid_recruit"
 						object = scope:recipient
 						scope:recruit = yes
 					}
 				}
+				trigger_else = {
+					is_courtier_of = scope:actor
+				}
+
 				custom_description = {
 					text = "release_executioner_invalid_take_vows_condition"
 					object = scope:recipient
@@ -2280,7 +2309,6 @@ release_from_prison_interaction = {
 				is_child_of = scope:actor
 			}
 		}
-
 		# Struggle
 		modifier = {
 			trigger = {
@@ -2335,6 +2363,24 @@ release_from_prison_interaction = {
 						}
 					}
 					add = 200
+				}
+			}
+		}
+		modifier = { # Family Feud
+			add = -50
+			exists = scope:actor.house
+			exists = scope:recipient.house
+			scope:actor = {
+				house.house_head = {
+					any_owned_story = {
+						story_type = story_cycle_house_feud
+						has_variable = house_feud_house
+						var:house_feud_house = scope:recipient.house
+					}
+				}
+				has_opinion_modifier = {
+					modifier = house_feud_opinion
+					target = scope:recipient.house.house_head
 				}
 			}
 		}

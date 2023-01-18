@@ -419,7 +419,10 @@ combat_event.0005 = {
 			scope:friendly_commander = {
 				send_interface_toast = {
 					title = combat_event.0005.message
-					set_relation_rival = root
+					set_relation_rival = {
+						target = root
+						reason = rival_undefeated_defeated
+					}
 				}
 			}
 		}
@@ -599,7 +602,7 @@ combat_event.1001 = {
 		# Save necessary scopes for later usage.
 
 		# [PoW]
-		# For use in PoW_capture_effect
+		# For use in prisoner_of_war_capture_effect
 		combat.location = { save_scope_as = battle_loc }
 		debug_log = "dbg_log combat_event.1001"
 		scope:battle_loc = { debug_log_scopes = no }
@@ -923,6 +926,12 @@ combat_event.1001 = {
 							}
 						}
 
+						save_died_in_battle_variables_effect = {
+							ENEMY = scope:combat_winner
+							LEADER = scope:combat_loser
+							LOCATION = scope:combat_location
+						}
+
 						# State Ransoms: characters are more likely to surrender if their liege will pay their ransom, which makes them less likely to die.
 						modifier = {
 							factor = 0.5
@@ -939,7 +948,7 @@ combat_event.1001 = {
 						scope:winning_side = {
 							random_side_knight = {
 								limit = {
-									this.prowess >= { value = scope:this_combatant.prowess multiply = 0.8 }
+									this.prowess >= scope:this_combatant.prowess_for_combat_event_opponent
 								}
 
 								weight = {
@@ -1117,7 +1126,7 @@ combat_event.1002 = {
 	immediate = {
 
 		# [PoW]
-		# For use in PoW_capture_effect
+		# For use in prisoner_of_war_capture_effect
 		scope:combat_winner = {
 			if = {
 				limit = {
@@ -1225,7 +1234,7 @@ combat_event.1002 = {
 				
 				save_temporary_scope_as = this_prisoner
 				# [PoW]
-				PoW_capture_effect = {
+				prisoner_of_war_capture_effect = {
 					TARGET = this
 					IMPRISONER = scope:combat_winner
 					LOCATION = scope:battle_loc
@@ -1272,6 +1281,27 @@ combat_event.1002 = {
 						}
 					}
 				}
+			}
+			if = {
+				limit = {
+					scope:combat_winner = { is_in_army = yes }
+					any_in_list = {
+						list = relevant_prisoners_of_war
+						is_alive = yes
+						is_imprisoned_by = scope:combat_winner
+						has_relation_rival = scope:combat_winner
+					}
+				}
+				every_in_list = {
+					list = relevant_prisoners_of_war
+					limit = {
+						is_alive = yes
+						is_imprisoned_by = scope:combat_winner
+						has_relation_rival = scope:combat_winner
+					}
+					add_to_list = captured_rivals
+				}
+				scope:combat_winner = { trigger_event = bp1_yearly.8060 }
 			}
 		}
 	}
