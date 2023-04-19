@@ -662,11 +662,8 @@ window = {
 													}
 
 													background = {
-														name = "skill_icon_bg"
-														margin = { 10 0 }
-														texture = "gfx/interface/window_character/character_view_skills_bg.dds"
-														framesize = { 70 26 }
-														frame = "[SkillItem.GetFrame]"
+														using = Background_Area_Dark
+														margin = {4 2}
 													}
 												}
 											}
@@ -734,7 +731,7 @@ window = {
 
 					background = {
 						name = "army_state_background"
-						texture = "[Army.GetArmyStatusIcon]"
+						texture = "[Army.GetArmyStatusIllustration]"
 						margin_top = 5
 						margin_right = -5
 						using = Mask_Rough_Edges
@@ -911,6 +908,23 @@ window = {
 
 										expand = {}
 									}
+								}	
+								hbox = {
+									layoutpolicy_horizontal = expanding
+									visible = "[Army.HasAcclaimedKnights]"
+									tooltip = "[Army.BuildAcclaimedKnightsBreakdown]"
+									using = tooltip_se
+
+									icon = {
+										name = "acclaimed_knights_icon"
+										size = { 40 40 }
+										texture = "gfx/interface/icons/icon_knight_acclaimed.dds"
+									}
+									text_single = {
+										layoutpolicy_horizontal = expanding
+										text = "[Army.GetNumAcclaimedKnights]"
+									}
+									expand = {}
 								}
 
 								expand = {}
@@ -1357,16 +1371,15 @@ window = {
 
 				blockoverride "scrollbox_content"
 				{
-					vbox = {
+					fixedgridbox = {
 						datamodel = "[ArmyReorgWindow.GetLeftItems]"
-						layoutpolicy_horizontal = expanding
-						spacing = 3
+						addcolumn = 350
+    					addrow = 53
 
 						item = {
 							button_standard_list = {
 								name = "regiment_item"
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
+								size = { 350 50 }
 								onclick = "[RegimentReorgEntry.MoveRegiment]"
 
 								using = reorg_regiment_tooltips
@@ -1401,16 +1414,15 @@ window = {
 
 				blockoverride "scrollbox_content"
 				{
-					vbox = {
+					fixedgridbox = {
 						datamodel = "[ArmyReorgWindow.GetRightItems]"
-						layoutpolicy_horizontal = expanding
-						spacing = 3
+						addcolumn = 350
+    					addrow = 53
 
 						item = {
 							button_standard_list = {
 								name = "regiment_item"
-								layoutpolicy_horizontal = expanding
-								size = { 0 50 }
+								size = { 350 50 }
 								onclick = "[RegimentReorgEntry.MoveRegiment]"
 
 								using = reorg_regiment_tooltips
@@ -1905,9 +1917,16 @@ types ArmyWindow
 
 			highlight_icon = {
 				name = "knight_icon"
-				visible = "[Character.IsValid]"
+				visible = "[And( Character.IsValid, Not( Character.GetAcclaimedAccolade.IsValid ) )]"
 				size = { 35 35 }
 				texture = "gfx/interface/icons/icon_knight_small.dds"
+			}
+
+			highlight_icon = {
+				name = "acclaimed_knight_icon"
+				visible = "[And( Character.IsValid, Character.GetAcclaimedAccolade.IsValid )]"
+				size = { 45 45 }
+				texture = "gfx/interface/icons/icon_knight_acclaimed.dds"
 			}
 		}
 

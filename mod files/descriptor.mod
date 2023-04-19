@@ -1,9 +1,9 @@
-version="1.0.5"
+version="1.0.6"
 tags={
 	"Gameplay"
 	"Warfare"
 	"Balance"
 }
 name="Prisoners of War"
-supported_version="1.8.*"
+supported_version="1.9.*"
 remote_file_id="2511247871"

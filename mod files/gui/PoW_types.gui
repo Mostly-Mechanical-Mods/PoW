@@ -268,7 +268,7 @@ template PoW_background {
 	background = {
 		visible = "[GetScriptedGui('prison_screen_PoW').IsShown(GuiScope.SetRoot( CharacterListItem.GetCharacter.MakeScope ).End)]"
 		# texture = "gfx/interface/illustrations/army_status/camped.dds"
-		texture = "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetArmyStatusIcon]"
+		texture = "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetArmyStatusIllustration]"
 		margin = { -5 0 }
 		fittype = centercrop
 		alpha = 0.3
@@ -299,7 +299,7 @@ template UniUI_PoW_prison_background {
 	background = {
 		visible = "[GetScriptedGui('prison_screen_PoW').IsShown(GuiScope.SetRoot( Character.MakeScope ).AddScope( 'player', GetPlayer.MakeScope ).End)]"
 		# texture = "gfx/interface/illustrations/army_status/camped.dds"
-		texture = "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetArmyStatusIcon]"
+		texture = "[Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetArmyStatusIllustration]"
 		margin = { -5 0 }
 		fittype = centercrop
 		alpha = 0.3

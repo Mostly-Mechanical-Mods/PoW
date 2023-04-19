@@ -1,8 +1,8 @@
 ﻿namespace = PoW_event
 
 PoW_event.0001 = {
-	type = empty
 	hidden = yes
+	scope = casus_belli
 
 	immediate = {
 		# Check for characters that might have been liberated on war over, and erase them from the story_PoW_list

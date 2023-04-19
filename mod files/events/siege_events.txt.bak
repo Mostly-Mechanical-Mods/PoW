@@ -970,7 +970,7 @@ scripted_trigger siege_0031_artifact_can_be_stolen = {
 siege.0031 = {
 	hidden = yes
 
-	trigger = {
+	trigger = { 
 		any_in_list = {
 			list = occupied_baronies
 			exists = holder
@@ -1078,60 +1078,60 @@ siege.0031 = {
 				30 = {
 					ep1_chance_stealing_damaging_artifacts_modifier = { TARGET = scope:barony.holder }
 					modifier = {
-						add = 1.5
-						scope:stolen_artifact = {
-							rarity = common
+							add = 1.5
+							scope:stolen_artifact = {
+								rarity = common
+							}
 						}
-					}
-					modifier = {
-						add = 1.5
-						scope:stolen_artifact = {
-							rarity = common
-							OR = {
-								AND = {
-									artifact_slot_type = primary_armament
-									root = {
-										any_equipped_character_artifact = {
-											artifact_slot_type = primary_armament
+						modifier = {
+							add = 1.5
+							scope:stolen_artifact = {
+								rarity = common
+								OR = {
+									AND = {
+										artifact_slot_type = primary_armament
+										root = {
+											any_equipped_character_artifact = {
+												artifact_slot_type = primary_armament
+											}
 										}
 									}
-								}
-								AND = {
-									artifact_slot_type = regalia
-									root = {
-										any_equipped_character_artifact = {
-											artifact_slot_type = regalia
+									AND = {
+										artifact_slot_type = regalia
+										root = {
+											any_equipped_character_artifact = {
+												artifact_slot_type = regalia
+											}
 										}
 									}
-								}
-								AND = {
-									artifact_slot_type = helmet
-									root = {
-										any_equipped_character_artifact = {
-											artifact_slot_type = helmet
+									AND = {
+										artifact_slot_type = helmet
+										root = {
+											any_equipped_character_artifact = {
+												artifact_slot_type = helmet
+											}
 										}
 									}
-								}
-								AND = {
-									artifact_slot_type = armor
-									root = {
-										any_equipped_character_artifact = {
-											artifact_slot_type = armor
+									AND = {
+										artifact_slot_type = armor
+										root = {
+											any_equipped_character_artifact = {
+												artifact_slot_type = armor
+											}
 										}
 									}
-								}
-								AND = {
-									artifact_slot_type = primary_armament
-									root = {
-										any_equipped_character_artifact = {
-											count >= 4
-											artifact_slot_type = miscellaneous
+									AND = {
+										artifact_slot_type = primary_armament
+										root = {
+											any_equipped_character_artifact = {
+												count >= 4
+												artifact_slot_type = miscellaneous
+											}
 										}
 									}
 								}
 							}
 						}
-					}
 					# Artifact Damaged
 					damage_artifact_in_battle_effect = {
 						LOCATION = title_province
