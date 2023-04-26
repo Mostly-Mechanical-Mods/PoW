@@ -216,3 +216,16 @@ PoW_disband_all = {
 		}
 	}
 }
+
+PoW_army_disband = {
+	scope = army
+	effect = {
+		army_commander ?= {
+			if = {
+				limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+				create_story = PoW_commander_story
+			}
+			var:commander_story = { end_story = yes }
+		}
+	}
+}
