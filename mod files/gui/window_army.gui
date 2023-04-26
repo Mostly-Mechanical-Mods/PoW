@@ -30,7 +30,7 @@ window = {
 		name = _show
 		on_start = "[GetVariableSystem.Set( 'county_view_open', 'true' )]"
 		on_start = "[GetVariableSystem.Set( 'hide_bottom_left_HUD', 'true' )]"
-
+		on_start = "[GetScriptedGui('PoW_army_select').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 		using = Animation_FadeIn_Standard
 		using = Sound_WindowShow_Standard
 		using = Animation_FadeIn_BottomLeft
@@ -40,7 +40,7 @@ window = {
 		name = _hide
 		on_start = "[GetVariableSystem.Clear( 'county_view_open' )]"
 		on_start = "[GetVariableSystem.Clear( 'hide_bottom_left_HUD' )]"
-
+		on_start = "[GetScriptedGui('PoW_army_select_delete').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
 		using = Animation_FadeOut_Standard
 		using = Sound_WindowHide_Standard
 		using = Animation_FadeOut_BottomLeft
@@ -213,7 +213,9 @@ window = {
 
 							button_army_merge = {
 								parentanchor = center
+								onclick = "[GetScriptedGui('PoW_button_army_merge_before').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 								onclick = "[ArmyWindow.MergeSelected]"
+								onclick = "[GetScriptedGui('PoW_button_army_merge_after').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 								shortcut = "army_merge"
 							}
 						}
@@ -340,6 +342,7 @@ window = {
 				layoutpolicy_horizontal = expanding
 				minimumsize = { 0 48  }
 				onclick = "[ArmyWindow.SelectThisUnitOnly]"
+				onclick = "[GetScriptedGui('PoW_army_select').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 
 				tooltip = "ARMY_SELECT_THIS_ONLY"
 
@@ -349,6 +352,7 @@ window = {
 					duration = 0.2
 					next = "b"
 					using = Animation_Curve_Default
+					on_start = "[GetScriptedGui('PoW_army_select').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 				}
 
 				state = {
@@ -463,6 +467,7 @@ window = {
 					duration = 0.2
 					next = "b"
 					using = Animation_Curve_Default
+					on_start = "[GetScriptedGui('PoW_army_select').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 				}
 
 				state = {
@@ -569,10 +574,16 @@ window = {
 
 							blockoverride "portrait_button_template_onclick"
 							{
+								#[PoW]
+								onclick = "[GetScriptedGui('PoW_army_window').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',Army.MakeScope).End)]"
+								#[/PoW]
 								onclick = "[ArmyWindow.ShowCommanders]"
 							}
 
 							blockoverride "onclick" {
+								#[PoW]
+								onclick = "[GetScriptedGui('PoW_army_window').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',Army.MakeScope).End)]"
+								#[/PoW]
 								onclick = "[ArmyWindow.ShowCommanders]"
 
 								button_icon = {
@@ -952,6 +963,7 @@ window = {
 			duration = 0.2
 			next = "b"
 			using = Animation_Curve_Default
+			on_start = "[GetScriptedGui('PoW_army_select').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('army',ArmyWindow.GetArmy.MakeScope).End)]"
 		}
 
 		state = {
@@ -1154,7 +1166,10 @@ window = {
 
 					button_army_split_in_half = {
 						parentanchor = center
+						#[PoW]
+						onclick = "[GetScriptedGui('PoW_button_army_split_before').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('province',ArmyWindow.GetArmy.GetLocation.MakeScope).End)]"
 						onclick = [ArmyWindow.SplitHalfSelected]
+						onclick = "[GetScriptedGui('PoW_button_army_split_after').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('province',ArmyWindow.GetArmy.GetLocation.MakeScope).End)]"
 						shortcut = army_split_half
 						tooltip = [ArmyWindow.BuildSplitHalfTooltip]
 						using = tooltip_ne

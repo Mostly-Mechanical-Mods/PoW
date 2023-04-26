@@ -13,8 +13,37 @@ on_game_start_PoW = {
 # scope:army is the army
 on_army_enter_province = {
 	on_actions = {
-		PoW_location_update
+		# PoW_location_update
+		PoW_commander_gather_travel_plan_update
+		PoW_commander_follow_travel_plan_update
+		PoW_commander_follow_travel_plan_check
 		# PoW_transfer_on_action_bugfix
+	}
+}
+
+PoW_commander_gather_travel_plan_update = {
+	trigger = { scope:army = { exists = var:commander_gather }}
+	effect = {
+		scope:army.var:commander_gather = {
+			add_travel_waypoint = scope:army.location
+		}
+	}
+}
+
+PoW_commander_follow_travel_plan_update = {
+	trigger = { scope:army = { exists = var:commander_follow }}
+	effect = {
+		scope:army.var:commander_follow = {
+			if = {
+				limit = { is_paused = yes }
+				resume_travel_plan = yes
+			}
+			add_travel_waypoint = scope:army.location
+			while = {
+				count = next_destination_arrival_days
+				add_destination_progress = { days = 1 }
+			}
+		}
 	}
 }
 	
@@ -44,6 +73,23 @@ PoW_location_update = {
 				name = story_location
 				value = scope:army.location
 			}
+			every_in_list = {
+				variable = story_PoW_list
+				current_travel_plan ?= {
+					if = {
+						limit = { is_paused = yes }
+						resume_travel_plan = yes
+					}
+					add_travel_waypoint = scope:army.location
+					while = {
+						count = next_destination_arrival_days
+						add_destination_progress = { days = 1 }
+					}
+					delay_travel_plan = {
+						years = 10
+					}
+				}
+			}
 		}
 		scope:army.var:story_PoW.var:story_location = { debug_log_scopes = no }
 
@@ -61,22 +107,21 @@ PoW_dungeon_transfer_on_action = {
 		# could be simplified with a can_disband trigger
 		scope:army = {
 			exists = var:story_PoW
-			is_enemy_army_nearby = no
-			is_hostile_army_nearby = no
+			FF_army_has_hostile_or_enemy_army_nearby = no
 		}
 		OR = {
 			AND = {
 				is_at_war = yes
 				scope:army = {
 					OR = {
-						is_in_own_territory = yes
-						is_in_friendly_territory = yes
+						FF_is_in_own_territory = yes
+						FF_is_in_friendly_territory = yes
 					}
 				}
 			}
 			scope:army = {
 				is_raid_army = yes
-				is_in_own_territory = yes
+				FF_is_in_own_territory = yes
 			}
 		}
 	}
@@ -330,7 +375,12 @@ on_birth_prisoner_of_war = {
 # character just about to die in root scope
 # if a killer is know, it's set as scope:killer
 #Triggered by code
-on_death = { on_actions = { on_death_prisoner_of_war }}
+on_death = {
+	on_actions = {
+		on_death_prisoner_of_war
+		on_death_commander
+	}
+}
 on_death_prisoner_of_war = {
 	trigger = { exists = var:story_PoW }
 	effect = {
@@ -345,6 +395,119 @@ on_death_prisoner_of_war = {
 			}
 		}
 		remove_variable = story_PoW
+	}
+}
+
+on_death_commander = {
+	trigger = {
+		is_commanding_army = yes
+		exists = current_travel_plan
+	}
+	effect = {
+		current_travel_plan.current_location = { save_scope_as = current_location }
+		commanding_army.army_owner = {
+			ordered_knight = {
+				limit = { is_in_army = root.commanding_army }
+				order_by = martial
+				save_scope_as = new_commander
+			}
+		}
+		if = {
+			limit = { exists = scope:new_commander }
+			commanding_army = { assign_commander = scope:new_commander }
+			scope:new_commander = {
+				set_location = scope:current_location
+				liege_or_court_owner.capital_province = { save_scope_as = home }
+				start_travel_plan = { 
+					destination = scope:home
+					players_use_planner = no
+					return_trip = no
+					# on_arrival_destinations = all
+					# on_arrival_on_action = PoW_commander_travel_plan_delay_check
+				}
+				current_travel_plan = {
+					set_variable = {
+						name = army_follow
+						value = scope:army
+					}
+					save_scope_as = new_travel_plan
+					save_scope_value_as = {
+						name = delay
+						value = flag:debug
+					}
+					scope:delay = {
+						trigger_event = {
+							on_action = PoW_commander_travel_plan_delay
+						}
+					}
+				}
+				scope:army = {
+					set_variable = {
+						name = commander_follow
+						value = scope:travel_plan
+					}
+				}
+			}
+			current_travel_plan = {
+				every_entourage_character = {
+					scope:new_travel_plan = { add_companion = prev }
+				}
+			}
+		}
+		else = {
+			current_travel_plan = {
+				every_entourage_character = {
+					limit = { is_imprisoned = yes }
+					add_to_list = released_prisoners
+					if = {
+						limit = { is_landed = yes }
+						capital_province = { add_to_list = destinations }
+					}
+					else = { liege_or_court_owner.capital_province = { add_to_list = destinations }}
+					release_from_prison = yes
+					set_location = scope:current_location
+				}
+			}
+			every_in_list = {
+				list = destinations
+				save_scope_as = destination
+				ordered_in_list = {
+					list = released_prisoners
+					limit = {
+						OR = {
+							capital_province ?= prev
+							liege_or_court_owner.capital_province ?= prev
+						}
+					}
+					order_by = {
+						value = 1
+						add = highest_held_title_tier
+						multiply = 10
+						if = {
+							limit = { is_adult = no }
+							multiply = 0
+						}
+					}
+					start_travel_plan = { 
+						destination = scope:destination
+						players_use_planner = no
+						return_trip = no
+					}
+					current_travel_plan = { save_scope_as = new_travel_plan }
+					every_in_list = {
+						list = released_prisoners
+						limit = {
+							NOT = { this = prev }
+							OR = {
+								capital_province ?= prev
+								liege_or_court_owner.capital_province ?= prev
+							}
+						}
+						scope:new_travel_plan = { add_companion = prev }
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -460,5 +623,178 @@ on_release_from_prison_PoW = {
 			}
 		}
 		remove_variable = story_PoW
+	}
+}
+
+on_commander_travel_to_army = {
+	trigger = { current_travel_plan.current_location = current_travel_plan.var:army.location }
+	effect = {
+		current_travel_plan.var:army = { save_scope_as = army }
+		current_travel_plan = { abort_travel_plan = yes }
+		scope:army = {
+			assign_commander = prev
+			remove_variable = commander_gather
+		}
+		if = {
+			limit = { is_ruler = yes }
+			capital_province = { save_scope_as = home }
+		}
+		else = {
+			court_owner.capital_province = { save_scope_as = home }
+		}
+		start_travel_plan = { 
+			destination = scope:home
+			travel_leader = this
+			players_use_planner = no
+			return_trip = no
+			# on_arrival_destinations = all
+			# on_arrival_on_action = PoW_commander_travel_plan_delay_check
+		}
+		current_travel_plan = {
+			set_variable = {
+				name = army_follow
+				value = scope:army
+			}
+			save_scope_as = travel_plan
+			save_scope_value_as = {
+				name = delay
+				value = flag:debug
+			}
+			scope:delay = {
+				trigger_event = {
+					on_action = PoW_commander_travel_plan_delay
+				}
+			}
+		}
+		scope:army = {
+			set_variable = {
+				name = commander_follow
+				value = scope:travel_plan
+			}
+		}
+	}
+}
+
+PoW_commander_travel_plan_delay = {
+	trigger = {
+		exists = scope:travel_plan
+		exists = scope:travel_plan.var:army_follow
+		scope:travel_plan.travel_plan_owner = { is_commanding_army = yes }
+	}
+	effect = {
+		debug_log = "PoW_commander_travel_plan_delay"
+		debug_log_scopes = no
+		scope:travel_plan = {
+			delay_travel_plan = {
+				days = 6
+				add = no
+			}
+		}
+	}
+	on_actions = {
+		delay = { days = 5 }
+		PoW_commander_travel_plan_delay
+	}
+}
+
+PoW_commander_follow_travel_plan_check = {
+	trigger = {
+		exists = scope:army.army_commander
+		NOT = { exists = scope:army.army_commander.current_travel_plan }
+	}
+	effect = {
+		if = {
+			limit = { debug_only = yes }
+			debug_log = "PoW_commander_follow_travel_plan_check"
+			debug_log_scopes = no
+		}
+		scope:army.army_commander = {
+			if = {
+				limit = { debug_only = yes }
+				debug_log_scopes = no
+			}
+			if = {
+				limit = { is_ruler = yes }
+				capital_province = { save_scope_as = home }
+			}
+			else = {
+				court_owner.capital_province = { save_scope_as = home }
+			}
+			start_travel_plan = { 
+				destination = scope:home
+				travel_leader = this
+				players_use_planner = no
+				return_trip = no
+				# on_arrival_destinations = all
+				# on_arrival_on_action = PoW_commander_travel_plan_delay_check
+			}
+			current_travel_plan = {
+				set_variable = {
+					name = army_follow
+					value = scope:army
+				}
+				save_scope_as = travel_plan
+				save_scope_value_as = {
+					name = delay
+					value = flag:debug
+				}
+				scope:delay = {
+					trigger_event = {
+						on_action = PoW_commander_travel_plan_delay
+					}
+				}
+			}
+			scope:army = {
+				set_variable = {
+					name = commander_follow
+					value = scope:travel_plan
+				}
+			}
+		}
+	}
+}
+
+test_travel_plan = {
+	trigger = {
+
+	}
+	effect = {
+		debug_log = "test_travel_plan"
+		debug_log_scopes = no
+		current_location.county = {
+			debug_log_scopes = no
+			random_neighboring_county = {
+				title_province = {
+					save_scope_as = waypoint
+				}
+			}
+		}
+		scope:waypoint ?= { debug_log_scopes = no }
+		add_travel_waypoint = scope:waypoint
+		while = {
+			count = next_destination_arrival_days
+			add_destination_progress = { days = 1 }
+		}
+		pause_travel_plan = yes
+	}
+	on_actions = { test_travel_plan }
+}
+
+on_travel_plan_abort = {
+	on_actions = {
+		debug_on_travel_plan_abort
+	}
+}
+
+on_travel_plan_cancel = {
+	on_actions = {
+		debug_on_travel_plan_cancel
+	}
+}
+
+debug_on_travel_plan_abort = {
+	effect = {
+		debug_log = "on_travel_plan_abort"
+		debug_log_scopes = yes
 	}
 }

@@ -1,0 +1,63 @@
+﻿can_be_commander_now_trigger = {
+	can_be_commander_basic_trigger = { ARMY_OWNER = $ARMY_OWNER$ }
+	is_imprisoned = no
+	custom_description = {
+		text = ALREADY_IN_ACTIVITY
+		NOR = {
+			exists = involved_activity
+			has_variable = homage_liege_scope
+			has_character_flag = meditation_character_flag
+			has_character_flag = petition_liege_character_flag
+			has_character_flag = holding_court_character_flag
+			has_character_flag = being_visited_on_tour
+		}
+	}
+	# Must not be currently coming from or going somewhere
+	#[PoW]
+	PoW_can_be_commander_now_trigger = yes
+	#[/PoW]
+}
+
+can_be_knight_trigger = {
+	is_commanding_army = no
+	trigger_if = {
+		limit = {
+			$ARMY_OWNER$.culture = {
+				has_cultural_parameter = minimum_prowess_for_knights
+			}
+		}
+		prowess >= 12
+	}
+	can_be_warrior_trigger = { ARMY_OWNER = $ARMY_OWNER$ }
+	trigger_if = {
+		limit = {
+			OR = {
+				has_trait = devoted
+				is_clergy = yes
+			}
+		}
+		OR = {
+			faith = { has_doctrine_parameter = clergy_can_fight }
+			culture = { has_cultural_parameter = culture_clergy_can_fight }
+			AND = {
+				$ARMY_OWNER$.culture = {
+					has_cultural_parameter = high_prowess_ignores_knight_restrictions
+				}
+				prowess >= 10
+			}
+		}
+	}
+	OR = {
+		AND = {
+			$ARMY_OWNER$.culture = {
+				has_cultural_parameter = high_prowess_ignores_knight_restrictions
+			}
+			prowess >= 10
+		}
+		has_trait = order_member # Order Members will fight for their faith even if their faith says no
+		NOT = {
+			has_trait = blind
+		}
+	}
+	is_ai = yes
+}

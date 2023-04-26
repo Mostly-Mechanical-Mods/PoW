@@ -6,3 +6,8 @@
 	# health = { < script math > }
 	icon = prison_negative
 }
+
+prisoner_of_war_travel = {
+	icon = prison_negative
+	travel_speed_mult = -100
+}

@@ -1,0 +1,121 @@
+﻿PoW_commander_story = {
+	on_setup = {
+		story_owner = {
+			set_variable = {
+				name = commander_story
+				value = scope:story
+			}
+		}
+		set_variable = {
+			name = commander
+			value = story_owner
+		}
+		set_variable = {
+			name = army_owner
+			value = story_owner.commanding_army.army_owner
+		}
+		set_variable = {
+			name = army
+			value =  story_owner.commanding_army
+		}
+		set_variable = { name = location value = story_owner.location }
+	}
+	on_end = {
+		if = {
+			limit = { any_in_list = { variable = PoW count > 0 }}
+			story_owner = {
+				set_location = scope:story.var:location
+				start_travel_plan = {
+					destination = scope:story.var:army_owner.capital_province
+					players_use_planner = no
+					return_trip = no
+					on_arrival_on_action = PoW_transfer_to_dungeon
+				}
+				current_travel_plan = {
+					set_variable = PoW_transfer
+					set_variable = block_vanilla_on_actions
+					set_variable = block_home
+					set_variable = block_customize
+					scope:story = {
+						every_in_list = {
+							variable = PoW
+							prev = {
+								add_to_variable_list = {
+									name = PoW
+									target = prev
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			story_owner = {
+				set_location = scope:story.var:location
+				start_travel_plan = {
+					destination = scope:story.var:army_owner.capital_province
+					players_use_planner = no
+					return_trip = no
+					on_arrival_on_action = PoW_transfer_to_dungeon
+				}
+				current_travel_plan ?= {
+					set_variable = PoW_transfer
+					set_variable = block_vanilla_on_actions
+					set_variable = block_home
+					set_variable = block_customize
+					scope:story = {
+						every_in_list = {
+							variable = PoW
+							prev = {
+								add_to_variable_list = {
+									name = PoW
+									target = prev
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	on_owner_death = {
+		PoW_liberate_prisoners = yes
+	}
+
+	effect_group = {
+		days = 1
+		first_valid = {
+			triggered_effect = {
+				trigger = {
+					story_owner = { is_commanding_army = yes }
+					NOT = { var:location = story_owner.location }
+				}
+				effect = {
+					if = {
+						limit = { debug_only = yes }
+						debug_log = "PoW_commander_story - Commander [THIS.Var('commander').Char.GetShortUINameNoTooltip] Owner [THIS.Var('owner').Char.GetNameNoTooltip] Army [THIS.Var('army').Army.GetNameNoTooltip]"
+						# debug_log = "New Location [THIS.Var('commander').Get"
+					}
+					set_variable = { name = location value = story_owner.location }
+					every_in_list = {
+						variable = PoW
+						set_location = { location = scope:story.var:location stick_to_location = yes }
+					}
+				}
+			}
+			triggered_effect = {
+				trigger = { story_owner = { is_commanding_army = yes }}
+				effect = {
+				}
+			}
+			triggered_effect = {
+				trigger = { story_owner = { is_commanding_army = no }}
+				effect = {
+					
+					end_story = yes
+				}
+			}
+		}
+	}
+}

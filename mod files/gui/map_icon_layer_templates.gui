@@ -262,6 +262,7 @@ types MapIcons {
 			
 			block "onclick" {
 				onclick = "[UnitMapIcon.OnClickArmyGroup( Army.Self )]"
+				onclick = "[PdxGuiTriggerAllAnimations('army_change')]"
 			}
 
 			button_group = {

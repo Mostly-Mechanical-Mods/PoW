@@ -1,0 +1,101 @@
+﻿# from scope:character
+# $LOCATION$ is scope:location
+# has_story_PoW_in_location = {
+# 	$LOCATION$ = { save_temporary_scope_as = check_location }
+# 	owns_story_of_type = story_PoW
+# 	any_owned_story = {
+# 		NAND = {
+# 			exists = scope:story
+# 			THIS = scope:story
+# 		}
+# 		story_type = story_PoW
+# 		var:story_location = scope:check_location
+# 	}
+# }
+
+# from scope:story
+# $LOCATION$ is scope:location
+# is_story_PoW_in_location = {
+# 	$LOCATION$ = { save_temporary_scope_as = check_location }
+# 	NAND = {
+# 		exists = scope:story
+# 		THIS = scope:story
+# 	}
+# 	story_type = story_PoW
+# 	var:story_location = scope:check_location
+# }
+
+# from scope:army
+# PoW_army_location_owner_is = {
+# 	location.county.holder = $RECIPIENT$
+# }
+
+PoW_can_be_ransomed = {
+	trigger_if = {
+		limit = { $PRISONER$ = { is_in_prison_type = prisoner_of_war }}
+		$PRISONER$.location = {
+			any_army_in_location = {
+				exists = army_commander
+				army_commander = {
+					any_in_list = {
+						variable = PoW
+						this = $PRISONER$
+					}
+				}
+				save_temporary_scope_as = army_PoW
+			}
+		}
+		trigger_if = {
+			limit = { scope:army_PoW = { is_raid_army = yes }}
+			custom_description = {
+				text = "PoW_army_is_raiding"
+				subject = $PRISONER$
+				scope:army_PoW = { is_raid_army = no }
+			}
+		}
+		trigger_if = {
+			limit = { scope:army_PoW = { is_army_in_combat = yes }}
+			custom_description = {
+				text = "PoW_army_not_fighting"
+				subject = $PRISONER$
+				scope:army_PoW = { is_army_in_combat = no }
+			}
+		}
+		trigger_else_if = {
+			limit = { $JAILOR$ = { is_at_war = yes }}
+			trigger_if = {
+				limit = { $JAILOR$ = { is_at_war_with = $PAYER$ }}
+				custom_description = {
+					text = "PoW_is_not_bargaining_chip"
+					subject = $PRISONER$
+					object = $PAYER$
+					NOR = {
+						$PRISONER$ = { is_heir_of = $PAYER$ }
+						$PRISONER$ = { is_close_family_of = $PAYER$ }
+						$PRISONER$ = { is_spouse_of = $PAYER$ }
+						$PRISONER$ = $PAYER$
+					}
+				}
+			}
+			trigger_if = {
+				limit = { NOT = { exists = $PRISONER$.location.barony }}
+				custom_description = {
+					text = "PoW_army_on_land"
+					subject = $PRISONER$
+					exists = $PRISONER$.location.barony
+				} 	
+			}
+			trigger_else_if = {
+				limit = { NOT = { $PRISONER$.location.barony_controller = $PAYER$ }}
+				custom_description = {
+					text = "PoW_army_location_owner_is"
+					subject = $PAYER$
+					object = $PRISONER$
+					$PRISONER$.location.barony_controller = $PAYER$
+				}
+			}
+			trigger_else = {}
+		}
+		trigger_else = {}
+	}
+}

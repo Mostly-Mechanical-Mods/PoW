@@ -1,0 +1,73 @@
+﻿
+# scope:PoW_army needed
+# PoW_commander_follow_army = {
+# 	start_travel_plan = { 
+# 		destination = $ARMY$.army_owner.capital_province
+# 		travel_leader = this
+# 		players_use_planner = no
+# 		return_trip = no
+# 		# on_arrival_destinations = all
+# 		# on_arrival_on_action = PoW_commander_travel_plan_delay_check
+# 	}
+# 	current_travel_plan = {
+# 		set_variable = {
+# 			name = army_follow
+# 			value = $ARMY$
+# 		}
+# 		save_scope_as = follow_travel_plan
+# 		delay_travel_plan = {
+# 			days = 8
+# 			add = no
+# 		}
+# 	}
+# 	if = {
+# 		limit = { NOT = { any_owned_story = { story_type = PoW_commander_story }}}
+# 		create_story = {
+# 			type = PoW_commander_story
+# 			save_scope_as = PoW_commander_story
+# 		}
+# 	}
+# 	else = {
+# 		random_owned_story = {
+# 			limit = { story_type = PoW_commander_story }
+# 			save_scope_as = PoW_commander_story
+# 		}
+# 	}
+# 	scope:PoW_commander_story = {
+# 		set_variable = {
+# 			name = army
+# 			value = $ARMY$
+# 		}
+# 		set_variable = {
+# 			name = travel_plan
+# 			value = scope:follow_travel_plan
+# 		}
+# 	}
+# 	$ARMY$ = {
+# 		set_variable = {
+# 			name = commander_follow
+# 			value = scope:follow_travel_plan
+# 		}
+# 	}
+# }
+
+PoW_liberate_prisoners = {
+	every_in_list = {
+		variable = PoW
+		release_from_prison = yes
+		if = {
+			limit = { is_landed = yes }
+			capital_province = { save_scope_as = home }
+		}
+		else = { court_owner.capital_province = { save_scope_as = home }}
+		if = {
+			limit = { exists = scope:home }
+			set_location = prev.var:location
+			start_travel_plan = {
+				destination = scope:home
+				players_use_planner = no
+				return_trip = no
+			}
+		}
+	}
+}

@@ -1,0 +1,218 @@
+﻿PoW_army_window = {
+	scope = character
+	saved_scopes = { army }
+	effect = {
+		set_variable = {
+			name = PoW_army_window
+			value = scope:army
+		}
+	}
+}
+
+PoW_appoint_commander = {
+	scope = character
+	saved_scopes = { army }
+	effect = {
+		start_travel_plan = { 
+			destination = scope:army.location
+			travel_leader = this
+			players_use_planner = no
+			return_trip = no
+		}
+		current_travel_plan = {
+			set_variable = PoW_commander_gather
+			set_variable = {
+				name = army
+				value = scope:army
+			}
+			save_scope_as = travel_plan
+		}
+		scope:army = {
+			set_variable = {
+				name = commander_gather
+				value = scope:travel_plan
+			}
+		}
+	}
+}
+
+PoW_button_army_split_before = {
+	scope = character
+	saved_scopes = { province }
+	effect = {
+		scope:province = {
+			every_army_in_location = {
+				limit = { army_owner = root }
+				set_variable = PoW_army_exists
+			}
+		}
+	}
+}
+
+PoW_button_army_split_after = {
+	scope = character
+	saved_scopes = { province }
+	effect = {
+		scope:province = {
+			every_army_in_location = {
+				limit = { army_owner = root }
+				if = {
+					limit = {
+						NOT = { has_variable = PoW_army_exists }
+						exists = army_commander
+					}
+					remove_commander = yes
+				}
+				remove_variable = PoW_army_exists
+			}
+		}
+	}
+}
+
+PoW_button_army_merge_before = {
+	scope = character
+	saved_scopes = { army }
+	effect = {
+		scope:army.location = {
+			every_army_in_location = {
+				limit = {
+					army_owner = root
+					NOT = { this = scope:army }
+				}
+				army_commander ?= {
+					set_variable = merge_commander
+				}
+			}
+		}
+	}
+}
+
+
+PoW_button_army_merge_after = {
+	scope = character
+	saved_scopes = { army }
+	effect = {
+		scope:army = {
+			if = {
+				limit = { NOT = { scope:army.army_commander ?= root.var:PoW_army_commander_select }}
+				if = {
+					limit = { exists = scope:army_commander }
+					remove_commander = yes
+					scope:army_commander.var:commander_story ?= { end_story = yes }
+				}
+				assign_commander = root.var:PoW_army_commander_select
+			}
+		}
+		scope:army.location = {
+			every_character_in_location = {
+				limit = { has_variable = merge_commander }
+				remove_variable = merge_commander
+				var:commander_story ?= { end_story = yes }
+			}
+		}
+	}
+}
+
+PoW_army_select = {
+	scope = character
+	saved_scopes = { army }
+	is_valid = {
+		exists = scope:army.army_owner
+		scope:army.army_owner = root
+	}
+	effect = {
+		if = {
+			limit = { scope:army.army_owner = root }
+			set_variable = {
+				name = PoW_army_select
+				value = scope:army
+			}
+			if = {
+				limit = { exists = scope:army.army_commander }
+				set_variable = {
+					name = PoW_army_commander_select
+					value = scope:army.army_commander
+				}
+			}
+			else = { remove_variable = PoW_army_commander_select }
+		}
+	}
+}
+
+PoW_army_select_delete = {
+	scope = character
+	effect = {
+		remove_variable = PoW_army_select
+		remove_variable = PoW_army_commander_select
+	}
+}
+
+PoW_commander_show = {
+	scope = character
+	saved_scopes = { army }
+	effect = {
+		every_courtier_or_guest = {
+			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
+			add_to_list = gathering_commanders
+		}
+		every_vassal = {
+			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
+			add_to_list = gathering_commanders
+		}
+		every_in_list = {
+			list = gathering_commanders
+			set_variable = {
+				name = PoW_commander_gather
+				value = yes
+				days = 1
+			}
+			start_travel_plan = {
+				destination = scope:army.location
+				players_use_planner = no
+				return_trip = no
+			}
+			set_variable = {
+				name = commander_gather_eta
+				value = current_travel_plan.final_destination_arrival_days
+			}
+			current_travel_plan = { cancel_travel_plan = yes }
+		}
+	}
+}
+
+PoW_raise_all_before = {
+	scope = character
+	effect = {
+		every_army = {
+			set_variable = PoW_raise_before
+		}
+	}
+}
+
+PoW_raise_all_after = {
+	scope = character
+	effect = {
+		every_army = {
+			if = {
+				limit = { has_variable = PoW_raise_before }
+				remove_variable = PoW_raise_before
+			}
+			else = { remove_commander = yes }
+		}
+	}
+}
+
+PoW_disband_all = {
+	scope = character
+	effect = {
+		every_army = {
+			army_commander ?= {
+				if = {
+					limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+					create_story = PoW_commander_story
+				}
+				var:commander_story ?= { end_story = yes }
+			}
+		}
+	}
+}

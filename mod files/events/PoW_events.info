@@ -16,8 +16,10 @@ PoW_event.0001 = {
 					limit = {
 						story_type = story_PoW
 						exists = var:story_army
-						var:story_army = { is_raid_army = no }
-						is_hostile_army_nearby = no
+						var:story_army = {
+							is_raid_army = no
+							FF_army_has_hostile_army_nearby = no
+						}
 					}
 					var:story_army = { debug_log_scopes = no }
 					every_in_list = {
@@ -59,8 +61,10 @@ PoW_event.0001 = {
 					limit = {
 						story_type = story_PoW
 						exists = var:story_army
-						var:story_army = { is_raid_army = no }
-						is_hostile_army_nearby = no
+						var:story_army = {
+							is_raid_army = no
+							FF_army_has_hostile_army_nearby = no
+						}
 					}
 					var:story_army = { debug_log_scopes = no }
 					every_in_list = {

@@ -1,11 +1,11 @@
 ﻿l_english:
 
   prisontype_pow: "Prisoner of War"
-  POW_CAPTUREDBY: "Captured by [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]\nLocation : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
+  POW_CAPTUREDBY: "Captured by [Character.GetImprisonedBy.GetName]\nLocation : [Character.GetCurrentLocation.GetName]"
   POW_CAPTUREDBY_SHORT: "Captured by [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]"
-  POW_LOCATION: "Location : [Character.MakeScope.Var('story_PoW').Var('story_location').Province.GetName]"
-  POW_NB_IN_UNIT: "Prisoners of War in army : [GetDataModelSize(UnitItem.GetArmy.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
-  POW_NB_IN_ARMY: "Prisoners of War in army : [GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))]"
+  POW_LOCATION: "Location : [Character.GetCurrentLocation.GetName]"
+  POW_NB_IN_UNIT: "Prisoners of War in army : [GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.Var('commander_story').GetList('PoW'))]"
+  POW_NB_IN_ARMY: "Prisoners of War in army : [GetDataModelSize(Army.GetCommander.MakeScope.Var('commander_story').GetList('story_PoW_list'))]"
   CAPTURED_FOR: "[Character.MakeScope.ScriptValue('get_days_in_prison')|0] days ago"
 
   ARMY_IS_RAIDING: "[CHARACTER.GetName] is held by [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], which is currently raiding"
@@ -16,3 +16,6 @@
   POW_IS_BARGAINING_CHIP: "[CHARACTER.GetNameNoTooltip] is an important bargaining chip in the on-going war against [TARGET_CHARACTER.GetName]"
 
   POW_CAPTURED_FROM: "Captured from [Character.GetLiege.GetName]"
+
+  POW_COMMANDER_GATHER: "#T Gather Commander#!\n[Character.GetShortUINameNoTooltip] will travel to [Army.GetLocation.GetName] to take command of the [Army.GetName]"
+  POW_COMMANDER_GATHER_ETA: "#italic [Character.MakeScope.Var('commander_gather_eta').GetValue] days#!"

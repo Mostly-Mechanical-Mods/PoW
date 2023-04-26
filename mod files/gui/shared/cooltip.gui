@@ -2030,7 +2030,7 @@ template unit_icon_item_tooltip {
 			}
 
 			# #--------------------------------------
-			# |  ¤ Attrition: 1%/month
+			# |  ï¿½ Attrition: 1%/month
 			# |  & Well supplied (100) -10/month
 			# | -> Province, 17 days left (29 May yyyy)
 			# | () Movement locked
@@ -2220,6 +2220,7 @@ template unit_icon_tooltip {
 						blockoverride "multi_select" {}
 						blockoverride "onclick" {
 							onclick = "[UnitMapIcon.OnClickArmy( Army.Self )]"
+							onclick = "[PdxGuiTriggerAllAnimations('army_change')]"
 						}
 						min_width = 120
 					}

@@ -1237,6 +1237,7 @@ combat_event.1002 = {
 				prisoner_of_war_capture_effect = {
 					TARGET = this
 					IMPRISONER = scope:combat_winner
+					LOCATION = scope:battle_loc
 				}
 				# [/PoW]
 				hidden_effect = {

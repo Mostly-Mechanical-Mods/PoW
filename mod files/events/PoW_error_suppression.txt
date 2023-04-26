@@ -1,0 +1,20 @@
+﻿namespace = LTAF_error_suppression
+
+LTAF_error_suppression.0001 = {
+	hidden = yes
+	orphan = yes
+
+	trigger = {
+		
+	}
+
+	immediate = {	
+		fix_variable_error = { X = debug }
+		fix_variable_error = { X = story_army }
+		fix_variable_error = { X = distinguished_PoW }
+		fix_variable_error = { X = story_PoW_list }
+		fix_variable_error = { X = story_PoW }
+		fix_variable_error = { X = PoW_army_window }
+
+	}
+}
