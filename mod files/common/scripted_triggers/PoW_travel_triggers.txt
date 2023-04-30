@@ -26,3 +26,7 @@ PoW_can_be_commander_now_trigger = {
 	}
 	trigger_else = { always = yes }
 }
+
+PoW_can_be_knight_trigger = {
+	is_commanding_army = no
+}

@@ -88,6 +88,14 @@
 		first_valid = {
 			triggered_effect = {
 				trigger = {
+					PoW_is_loaded = no
+				}
+				effect = {
+					end_story = yes
+				}
+			}
+			triggered_effect = {
+				trigger = {
 					story_owner = { is_commanding_army = yes }
 					NOT = { var:location = story_owner.location }
 				}

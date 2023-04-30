@@ -1,38 +1,8 @@
-﻿# from scope:character
-# $LOCATION$ is scope:location
-# has_story_PoW_in_location = {
-# 	$LOCATION$ = { save_temporary_scope_as = check_location }
-# 	owns_story_of_type = story_PoW
-# 	any_owned_story = {
-# 		NAND = {
-# 			exists = scope:story
-# 			THIS = scope:story
-# 		}
-# 		story_type = story_PoW
-# 		var:story_location = scope:check_location
-# 	}
-# }
-
-# from scope:story
-# $LOCATION$ is scope:location
-# is_story_PoW_in_location = {
-# 	$LOCATION$ = { save_temporary_scope_as = check_location }
-# 	NAND = {
-# 		exists = scope:story
-# 		THIS = scope:story
-# 	}
-# 	story_type = story_PoW
-# 	var:story_location = scope:check_location
-# }
-
-# from scope:army
-# PoW_army_location_owner_is = {
-# 	location.county.holder = $RECIPIENT$
-# }
-
-PoW_can_be_ransomed = {
+﻿PoW_can_be_ransomed = {
 	trigger_if = {
-		limit = { $PRISONER$ = { is_in_prison_type = prisoner_of_war }}
+		limit = {
+			$PRISONER$ = { is_in_prison_type = prisoner_of_war }
+		}
 		$PRISONER$.location = {
 			any_army_in_location = {
 				exists = army_commander
@@ -97,5 +67,21 @@ PoW_can_be_ransomed = {
 			trigger_else = {}
 		}
 		trigger_else = {}
+	}
+}
+
+PoW_ransom_me_interaction_is_valid_showing_failures_only = {
+	PoW_can_be_ransomed = {
+		PRISONER = scope:actor
+		JAILOR = scope:recipient
+		PAYER = scope:actor
+	}
+}
+
+PoW_pay_ransom_interaction_is_valid_showing_failures_only = {
+	PoW_can_be_ransomed = {
+		PRISONER = scope:secondary_recipient
+		JAILOR = scope:recipient
+		PAYER = scope:actor
 	}
 }

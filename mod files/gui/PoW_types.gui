@@ -582,7 +582,7 @@ types PoW {
 
 			## Error count
 			text_single = {
-				name = "error_text"
+				name = "error_text_nice"
 				visible = "[And(HasErrors,EqualTo_int32(NumberOrErrors,'(int32)69'))]"
 
 				raw_text = "Errors: Nice"

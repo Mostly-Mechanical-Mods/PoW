@@ -1,7 +1,7 @@
 ﻿mod_PoW_active = {
-	always = yes
+	has_game_rule = PoW_is_loaded
 }
 
 PoW_is_loaded = {
-	always = yes
+	has_game_rule = PoW_is_loaded
 }

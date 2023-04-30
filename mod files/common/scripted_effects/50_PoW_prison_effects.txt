@@ -1,21 +1,18 @@
 ﻿# [Vanilla] From file common\scripted_effects\00_prison_effects.txt
 # A lite version of imprison_character_effect without opinion penalties or other consequences (as they were captured in war, not at your command)
 # [PoW]
-# scope:PoW_army needed
-prisoner_of_war_capture_effect = {
+PoW_prisoner_of_war_capture_effect = {
 	if = {
 		limit = { debug_only = yes }
 		debug_log = "dbg_log prisoner_of_war_capture_effect"
 		debug_log_scopes = no
-		$TARGET$ = { debug_log_scopes = no }
-		$IMPRISONER$ = { debug_log_scopes = no }
+		scope:new_target = { debug_log_scopes = no }
+		scope:imprisoner = { debug_log_scopes = no }
 		scope:barony ?= { debug_log_scopes = no }
 	}
-	$TARGET$ = { save_temporary_scope_as = new_target }
-	$IMPRISONER$ = { save_temporary_scope_as = imprisoner }
 	if = {
 		limit = { NOT = { exists = scope:barony }}
-		$TARGET$.location.barony = { save_scope_as = barony }
+		scope:new_target.location.barony = { save_scope_as = barony }
 	}
 	scope:barony = {
 		if = {

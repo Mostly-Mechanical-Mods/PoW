@@ -24,7 +24,10 @@ on_army_enter_province = {
 }
 
 PoW_commander_story = {
-	trigger = { scope:army.army_commander ?= { NOT = { any_owned_story = { story_type = PoW_commander_story }}}}
+	trigger = {
+		PoW_is_loaded = yes
+		scope:army.army_commander ?= { NOT = { any_owned_story = { story_type = PoW_commander_story }}}
+	}
 	effect = {
 		scope:army.army_commander ?= {
 			create_story = PoW_commander_story
@@ -33,7 +36,10 @@ PoW_commander_story = {
 }
 
 PoW_commander_story_update = {
-	trigger = { scope:army = { has_variable = commander_gather }}
+	trigger = {
+		PoW_is_loaded = yes
+		scope:army = { has_variable = commander_gather }
+	}
 	effect = {
 		scope:army.var:commander_gather.current_travel_plan ?= {
 			add_travel_waypoint = scope:army.location
@@ -41,60 +47,7 @@ PoW_commander_story_update = {
 	}
 }
 
-# PoW_commander_gather_travel_plan_update = {
-# 	trigger = { scope:army = { exists = var:commander_gather }}
-# 	effect = {
-# 		debug_log = "PoW_commander_gather_travel_plan_update"
-# 		debug_log_scopes = yes
-# 		if = {
-# 			limit = { scope:army.var:commander_gather.current_location = scope:army.location }
-# 			if = {
-# 				limit = { NOT = { scope:army.army_commander ?= scope:army.var:commander_gather.travel_plan_owner }}
-# 				scope:army.var:commander_follow ?= {
-# 					remove_variable = army
-# 					if = {
-# 						limit = {
-# 							travel_plan_owner = { is_landed = yes }
-# 							any_entourage_character = {
-# 								is_imprisoned = yes
-# 								count = 0
-# 							}
-# 						}
-# 						reroute_to_home = yes
-# 					}
-# 				}
-# 				scope:army = { assign_commander = scope:army.var:commander_gather.travel_plan_owner }
-# 			}
-# 		}
-# 		else = {
-# 			scope:army.var:commander_gather = {
-# 				debug_log_scopes = no
-# 				add_travel_waypoint = scope:army.location
-# 			}
-# 		}
-# 	}
-# }
 
-# PoW_commander_follow_travel_plan_update = {
-# 	trigger = { scope:army = { exists = var:commander_follow }}
-# 	effect = {
-# 		debug_log = "PoW_commander_follow_travel_plan_update"
-# 		debug_log_scopes = yes
-# 		scope:army.var:commander_follow = {
-# 			if = {
-# 				limit = { is_paused = yes }
-# 				resume_travel_plan = yes
-# 			}
-# 			add_travel_waypoint = scope:army.location
-# 			while = {
-# 				limit = { NOT = { current_location = scope:army.location }}
-# 				add_destination_progress = { days = 1 }
-# 			}
-# 			delay_travel_plan = { days = 8 add = no }
-# 		}
-# 	}
-# }
-	
 # character just about to die in root scope
 # if a killer is know, it's set as scope:killer
 #Triggered by code
@@ -106,6 +59,7 @@ on_death = {
 
 PoW_on_death_commander = {
 	trigger = {
+		PoW_is_loaded = yes
 		is_commanding_army = yes
 		exists = current_travel_plan
 	}
@@ -209,7 +163,10 @@ on_release_from_prison_PoW = {
 }
 
 on_commander_travel_to_army = {
-	trigger = { current_travel_plan = { has_variable = PoW_commander_gather }}
+	trigger = {
+		PoW_is_loaded = yes
+		current_travel_plan = { has_variable = PoW_commander_gather }
+	}
 	effect = {
 		if = {
 			limit = { debug_only = yes} 
@@ -241,26 +198,6 @@ on_commander_travel_to_army = {
 	}
 }
 
-# PoW_commander_follow_travel_plan_check = {
-# 	trigger = {
-# 		exists = scope:army.army_commander
-# 		NOR = {
-# 			exists = scope:army.army_commander.current_travel_plan
-# 			scope:army.army_owner.capital_province ?= scope:army.location
-# 		}
-# 	}
-# 	effect = {
-# 		if = {
-# 			limit = { debug_only = yes }
-# 			debug_log = "PoW_commander_follow_travel_plan_check"
-# 			debug_log_scopes = no
-# 		}
-# 		scope:army.army_commander = {
-# 			PoW_commander_follow_army = { ARMY = scope:army }
-# 		}
-# 	}
-# }
-
 on_travel_plan_movement = {
 	on_actions = {
 		on_commander_travel_to_army
@@ -277,7 +214,10 @@ on_travel_plan_complete = {
 }
 
 on_commander_transfer_PoW = {
-	trigger = { current_travel_plan = { has_variable = PoW_transfer }}
+	trigger = {
+		PoW_is_loaded = yes
+		current_travel_plan = { has_variable = PoW_transfer }
+	}
 	effect = {
 		current_travel_plan = {
 			every_in_list = {
@@ -292,7 +232,10 @@ on_commander_transfer_PoW = {
 }
 
 on_travel_plan_movement_debug = {
-	trigger = { is_ai = no }
+	trigger = {
+		PoW_is_loaded = yes
+		is_ai = no
+	}
 	effect = {
 		debug_log = "on_travel_plan_movement_debug"
 		debug_log_scopes = no
@@ -302,7 +245,8 @@ on_travel_plan_movement_debug = {
 
 PoW_transfer_to_dungeon = {
 	trigger = {
-		current_travel_plan = { has_variable = PoW_transfer }
+		PoW_is_loaded = yes
+		current_travel_plan = { has_variable = PoW_transfer
 	}
 	effect = {
 		current_travel_plan = {
@@ -339,6 +283,7 @@ on_combat_end_loser = {
 
 PoW_prisoner_transfer_to_army = {
 	trigger = {
+		PoW_is_loaded = yes
 		exists = side_commander
 		side_commander = {
 			owns_story_of_type = PoW_commander_story

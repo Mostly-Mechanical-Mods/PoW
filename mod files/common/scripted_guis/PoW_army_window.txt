@@ -1,6 +1,7 @@
 ﻿PoW_army_window = {
 	scope = character
 	saved_scopes = { army }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		set_variable = {
 			name = PoW_army_window
@@ -12,6 +13,7 @@
 PoW_appoint_commander = {
 	scope = character
 	saved_scopes = { army }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		start_travel_plan = { 
 			destination = scope:army.location
@@ -39,6 +41,7 @@ PoW_appoint_commander = {
 PoW_button_army_split_before = {
 	scope = character
 	saved_scopes = { province }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		scope:province = {
 			every_army_in_location = {
@@ -52,6 +55,7 @@ PoW_button_army_split_before = {
 PoW_button_army_split_after = {
 	scope = character
 	saved_scopes = { province }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		scope:province = {
 			every_army_in_location = {
@@ -72,6 +76,7 @@ PoW_button_army_split_after = {
 PoW_button_army_merge_before = {
 	scope = character
 	saved_scopes = { army }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		scope:army.location = {
 			every_army_in_location = {
@@ -91,6 +96,7 @@ PoW_button_army_merge_before = {
 PoW_button_army_merge_after = {
 	scope = character
 	saved_scopes = { army }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		scope:army = {
 			if = {
@@ -117,6 +123,7 @@ PoW_army_select = {
 	scope = character
 	saved_scopes = { army }
 	is_valid = {
+		PoW_is_loaded = yes
 		exists = scope:army.army_owner
 		scope:army.army_owner = root
 	}
@@ -141,6 +148,7 @@ PoW_army_select = {
 
 PoW_army_select_delete = {
 	scope = character
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		remove_variable = PoW_army_select
 		remove_variable = PoW_army_commander_select
@@ -150,6 +158,7 @@ PoW_army_select_delete = {
 PoW_commander_show = {
 	scope = character
 	saved_scopes = { army }
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		every_courtier_or_guest = {
 			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
@@ -182,6 +191,7 @@ PoW_commander_show = {
 
 PoW_raise_all_before = {
 	scope = character
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		every_army = {
 			set_variable = PoW_raise_before
@@ -191,6 +201,7 @@ PoW_raise_all_before = {
 
 PoW_raise_all_after = {
 	scope = character
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		every_army = {
 			if = {
@@ -204,6 +215,7 @@ PoW_raise_all_after = {
 
 PoW_disband_all = {
 	scope = character
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		every_army = {
 			army_commander ?= {
@@ -219,6 +231,7 @@ PoW_disband_all = {
 
 PoW_army_disband = {
 	scope = army
+	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		army_commander ?= {
 			if = {
