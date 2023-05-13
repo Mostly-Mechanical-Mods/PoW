@@ -1,0 +1,8 @@
+﻿l_english:
+
+rule_FF_loaded: "Enable Foundational Framework"
+setting_FF_is_not_loaded: "#warning Missing#!"
+setting_FF_is_not_loaded_desc: "#warning Foundational Framework is not in your playset#!\nIt is required for Prisoners of War to work"
+
+PoW_foundational_framework_required_desc: "Foundational Framework is required to play with Prisoners of War"
+PoW_foundational_framework_required_click: "Please add Foundational Framework to your playset so you can enjoy Prisoners of War features"

@@ -3,6 +3,7 @@
 		is_commanding_army = yes
 		is_imprisoned = yes
 		current_travel_plan ?= { has_variable = PoW_commander_gather }
+		has_variable = PoW_commander_gather
 	}
 }
 

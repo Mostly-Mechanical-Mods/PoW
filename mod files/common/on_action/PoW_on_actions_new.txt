@@ -15,11 +15,24 @@ on_army_enter_province = {
 	on_actions = {
 		PoW_commander_story
 		PoW_commander_story_update
+		PoW_delivery
+		PoW_on_army_enter_province_debug
 		# PoW_location_update
 		# PoW_commander_gather_travel_plan_update
 		# PoW_commander_follow_travel_plan_update
 		# PoW_commander_follow_travel_plan_check
 		# PoW_transfer_on_action_bugfix
+	}
+}
+
+PoW_on_army_enter_province_debug = {
+	trigger = {
+		scope:army.army_owner = { is_ai = no }
+		PoW_debug = yes
+	}
+	effect = {
+		debug_log = "PoW_on_army_enter_province_debug"
+		debug_log_scopes = yes
 	}
 }
 
@@ -29,6 +42,11 @@ PoW_commander_story = {
 		scope:army.army_commander ?= { NOT = { any_owned_story = { story_type = PoW_commander_story }}}
 	}
 	effect = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_commander_story"
+			debug_log_scopes = yes
+		}
 		scope:army.army_commander ?= {
 			create_story = PoW_commander_story
 		}
@@ -41,8 +59,56 @@ PoW_commander_story_update = {
 		scope:army = { has_variable = commander_gather }
 	}
 	effect = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_commander_story_update"
+			debug_log_scopes = yes
+		}
 		scope:army.var:commander_gather.current_travel_plan ?= {
 			add_travel_waypoint = scope:army.location
+		}
+	}
+}
+
+PoW_delivery = {
+	trigger = {
+		PoW_is_loaded = yes
+		scope:new_location = scope:army.army_owner.capital_province
+		scope:army.army_commander.var:commander_story ?= {
+			any_in_list = { variable = PoW count > 0 }
+		}
+	}
+	effect = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_delivery"
+			debug_log_scopes = yes
+		}
+		scope:army.army_commander.var:commander_story = {
+			every_in_list = {
+				variable = PoW
+				save_scope_as = PoW
+				if = {
+					limit = {
+						OR = {
+							is_at_war_with = scope:army.army_owner
+							any_heir_title = {
+								holder ?= { is_at_war_with = scope:army.army_owner }
+							}
+							is_landed = yes
+							any_close_family_member = { is_landed = yes }
+						}
+					}
+					change_prison_type = house_arrest
+				}
+				else = { change_prison_type = dungeon }
+				prev = {
+					remove_list_variable = {
+						name = PoW
+						target = prev
+					}
+				}
+			}
 		}
 	}
 }
@@ -169,8 +235,8 @@ on_commander_travel_to_army = {
 	}
 	effect = {
 		if = {
-			limit = { debug_only = yes} 
-			debug_log = "on_commander_travel_to_army - Commander [THIS.Char.GetName] - Location [THIS.Char.GetCurrentLocation.GetNameNoTooltip] - Army [THIS.Char.GetTravelPlan.MakeScope.Var('army').Army.GetNameNoTooltip]"
+			limit = { PoW_debug = yes} 
+			debug_log = "on_commander_travel_to_army - Commander [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip] - Location [THIS.Char.GetCurrentLocation.GetNameNoTooltip] - Army [THIS.Char.GetTravelPlan.MakeScope.Var('army').Army.GetNameNoTooltip]"
 		}
 		current_travel_plan = {
 			if = {
@@ -246,7 +312,7 @@ on_travel_plan_movement_debug = {
 PoW_transfer_to_dungeon = {
 	trigger = {
 		PoW_is_loaded = yes
-		current_travel_plan = { has_variable = PoW_transfer
+		current_travel_plan = { has_variable = PoW_transfer }
 	}
 	effect = {
 		current_travel_plan = {
@@ -308,7 +374,7 @@ PoW_prisoner_transfer_to_army = {
 				limit = { exists = scope:PoW_transfer }
 				every_in_list = {
 					variable = PoW
-					debug_log = PoW
+					debug_log = "PoW [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]"
 					scope:PoW_transfer = {
 						add_to_variable_list = {
 							name = PoW

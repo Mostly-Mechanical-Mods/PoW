@@ -1,7 +1,5 @@
-﻿mod_PoW_active = {
-	has_game_rule = PoW_is_loaded
-}
+﻿mod_PoW_active = { NOT = { has_game_rule = PoW_is_not_loaded }}
 
-PoW_is_loaded = {
-	has_game_rule = PoW_is_loaded
-}
+PoW_is_loaded = { NOT = { has_game_rule = PoW_is_not_loaded }}
+
+PoW_debug = { has_game_rule = PoW_is_loaded_debug }

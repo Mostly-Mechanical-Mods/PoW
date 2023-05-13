@@ -1,0 +1,16 @@
+﻿# ### DECLARE WAR
+
+PoW_foundational_framework_required = {
+	type = alert
+	priority = 600
+	icon = action_PoW_foundational_framework_required
+	
+	check_create_action = {
+		if = {
+			limit = { has_game_rule = FF_is_not_loaded }
+			try_create_important_action = {
+				important_action_type = PoW_foundational_framework_required
+			}
+		}
+	}
+}

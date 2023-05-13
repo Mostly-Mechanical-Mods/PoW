@@ -646,8 +646,6 @@ types PoW {
 		}
 	}
 
-
-
 }
 
 template UniUI_PoW_army_disband {

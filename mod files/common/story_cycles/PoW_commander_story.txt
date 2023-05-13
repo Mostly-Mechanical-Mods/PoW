@@ -19,38 +19,28 @@
 			value =  story_owner.commanding_army
 		}
 		set_variable = { name = location value = story_owner.location }
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_commander_story on_setup"
+			debug_log = "PoW_commander_story  on_setup Commander [THIS.Var('commander').Char.GetShortUINameNoTooltip] Owner [THIS.Var('owner').Char.GetNameNoTooltip] Army [THIS.Var('army').Army.GetNameNoTooltip] Location [THIS.Var('commander').Char.GetCurrentLocation.GetNameNoTooltip]"
+		}
 	}
 	on_end = {
 		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_commander_story on_end"
+			story_owner = { debug_log_scopes = no }
+		}
+		if = {
 			limit = { any_in_list = { variable = PoW count > 0 }}
-			story_owner = {
-				set_location = scope:story.var:location
-				start_travel_plan = {
-					destination = scope:story.var:army_owner.capital_province
-					players_use_planner = no
-					return_trip = no
-					on_arrival_on_action = PoW_transfer_to_dungeon
-				}
-				current_travel_plan = {
-					set_variable = PoW_transfer
-					set_variable = block_vanilla_on_actions
-					set_variable = block_home
-					set_variable = block_customize
-					scope:story = {
-						every_in_list = {
-							variable = PoW
-							prev = {
-								add_to_variable_list = {
-									name = PoW
-									target = prev
-								}
-							}
-						}
-					}
+			if = {
+				limit = { PoW_debug = yes }
+				debug_log = "Return PoW"
+				if = {
+					limit = { NOT = { exists = scope:story.var:army_owner.capital_province }}
+					scope:story.var:army_owner = { debug_log_scopes = no }
 				}
 			}
-		}
-		else = {
 			story_owner = {
 				set_location = scope:story.var:location
 				start_travel_plan = {
@@ -78,22 +68,60 @@
 				}
 			}
 		}
+		else_if = {
+			limit = { story_owner = { is_alive = yes }}
+			if = { limit = { PoW_debug = yes } debug_log = "Return Home" }
+			story_owner = {
+				if = {
+					limit = { is_landed = yes }
+					capital_province = { save_scope_as = home }	
+				}
+				else_if = {
+					limit = { exists = court_owner }
+					court_owner.capital_province = { save_scope_as = home }
+				}
+				if = {
+					limit = { exists = scope:home }
+					set_location = scope:story.var:location
+					start_travel_plan = {
+						destination = scope:home
+						players_use_planner = no
+						return_trip = no
+						on_arrival_on_action = PoW_transfer_to_dungeon
+					}
+					current_travel_plan ?= {
+						# set_variable = PoW_transfer
+						set_variable = block_vanilla_on_actions
+						set_variable = block_home
+						set_variable = block_customize
+					}
+				}
+			}
+		}
 	}
+
 	on_owner_death = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_commander_story on_owner_death"
+			story_owner = { debug_log_scopes = no }
+		}
 		PoW_liberate_prisoners = yes
+		end_story = yes
 	}
 
 	effect_group = {
 		days = 1
 		first_valid = {
+			# 1
 			triggered_effect = {
-				trigger = {
-					PoW_is_loaded = no
-				}
+				trigger = { PoW_is_loaded = no }
 				effect = {
+					debug_log = "PoW_commander_story triggered_effect 1 [THIS.Var('owner').Char.GetNameNoTooltip]"
 					end_story = yes
 				}
 			}
+			# 2
 			triggered_effect = {
 				trigger = {
 					story_owner = { is_commanding_army = yes }
@@ -101,9 +129,8 @@
 				}
 				effect = {
 					if = {
-						limit = { debug_only = yes }
-						debug_log = "PoW_commander_story - Commander [THIS.Var('commander').Char.GetShortUINameNoTooltip] Owner [THIS.Var('owner').Char.GetNameNoTooltip] Army [THIS.Var('army').Army.GetNameNoTooltip]"
-						# debug_log = "New Location [THIS.Var('commander').Get"
+						limit = { PoW_debug = yes }
+						debug_log = "PoW_commander_story triggered_effect 2 Commander [THIS.Var('commander').Char.GetShortUINameNoTooltip] Owner [THIS.Var('owner').Char.GetNameNoTooltip] Army [THIS.Var('army').Army.GetNameNoTooltip]"
 					}
 					set_variable = { name = location value = story_owner.location }
 					every_in_list = {
@@ -112,15 +139,19 @@
 					}
 				}
 			}
+			# 3
 			triggered_effect = {
 				trigger = { story_owner = { is_commanding_army = yes }}
-				effect = {
-				}
+				effect = {}
 			}
+			# 4
 			triggered_effect = {
 				trigger = { story_owner = { is_commanding_army = no }}
 				effect = {
-					
+					if = {
+						limit = { PoW_debug = yes }
+						debug_log = "PoW_commander_story triggered_effect 4 Commander [THIS.Var('commander').Char.GetShortUINameNoTooltip] Owner [THIS.Var('owner').Char.GetNameNoTooltip]"
+					}
 					end_story = yes
 				}
 			}

@@ -52,8 +52,13 @@
 # }
 
 PoW_liberate_prisoners = {
+	if = {
+		limit = { PoW_debug = yes }
+		debug_log = "PoW_liberate_prisoners"
+	}
 	every_in_list = {
 		variable = PoW
+		if = { limit = { PoW_debug = yes } debug_log_scopes = no }
 		release_from_prison = yes
 		if = {
 			limit = { is_landed = yes }
@@ -62,11 +67,18 @@ PoW_liberate_prisoners = {
 		else = { court_owner.capital_province = { save_scope_as = home }}
 		if = {
 			limit = { exists = scope:home }
+			if = { limit = { PoW_debug = yes } scope:home = { debug_log_scopes = no }}
 			set_location = prev.var:location
 			start_travel_plan = {
 				destination = scope:home
 				players_use_planner = no
 				return_trip = no
+			}
+		}
+		prev = {
+			remove_list_variable = {
+				name = PoW
+				target = prev
 			}
 		}
 	}

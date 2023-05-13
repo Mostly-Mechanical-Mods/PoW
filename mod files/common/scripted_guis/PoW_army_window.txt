@@ -100,7 +100,10 @@ PoW_button_army_merge_after = {
 	effect = {
 		scope:army = {
 			if = {
-				limit = { NOT = { scope:army.army_commander ?= root.var:PoW_army_commander_select }}
+				limit = {
+					exists = root.var:PoW_army_commander_select
+					NOT = { scope:army.army_commander ?= root.var:PoW_army_commander_select }
+				}
 				if = {
 					limit = { exists = scope:army_commander }
 					remove_commander = yes
@@ -160,6 +163,7 @@ PoW_commander_show = {
 	saved_scopes = { army }
 	is_valid = { PoW_is_loaded = yes }
 	effect = {
+		add_to_list = gathering_commanders
 		every_courtier_or_guest = {
 			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
 			add_to_list = gathering_commanders
@@ -170,6 +174,7 @@ PoW_commander_show = {
 		}
 		every_in_list = {
 			list = gathering_commanders
+			limit = { NOT = { location = scope:army.location }}
 			set_variable = {
 				name = PoW_commander_gather
 				value = yes
@@ -180,11 +185,13 @@ PoW_commander_show = {
 				players_use_planner = no
 				return_trip = no
 			}
+			current_travel_plan = { set_variable = PoW_commander_gather }
 			set_variable = {
 				name = commander_gather_eta
 				value = current_travel_plan.final_destination_arrival_days
 			}
-			current_travel_plan = { cancel_travel_plan = yes }
+			current_travel_plan = { abort_travel_plan = yes }
+			# remove_variable = PoW_commander_gather
 		}
 	}
 }

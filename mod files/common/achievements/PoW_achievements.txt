@@ -1,17 +1,17 @@
-﻿PoW_01_achievement = {
-	possible = {
-		has_game_rule = PoW_is_loaded
-	}
-	happened = {
-		custom_description = {
-			text = PoW_01_achievement
-			OR = {
-				has_global_variable = PoW_01_achievement_unlocked
-				any_prisoner = {
-					is_in_prison_type = prisoner_of_war
-				}
-			}
-			# has_global_variable = test
-		}
-	}
-}
+﻿# PoW_01_achievement = {
+# 	possible = {
+# 		has_game_rule = PoW_is_loaded
+# 	}
+# 	happened = {
+# 		custom_description = {
+# 			text = PoW_01_achievement
+# 			OR = {
+# 				has_global_variable = PoW_01_achievement_unlocked
+# 				any_prisoner = {
+# 					is_in_prison_type = prisoner_of_war
+# 				}
+# 			}
+# 			# has_global_variable = test
+# 		}
+# 	}
+# }

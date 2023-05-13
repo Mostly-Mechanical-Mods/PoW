@@ -1,65 +1,80 @@
 ﻿# [Vanilla] From file common\scripted_effects\00_prison_effects.txt
 # A lite version of imprison_character_effect without opinion penalties or other consequences (as they were captured in war, not at your command)
 # [PoW]
+
 PoW_prisoner_of_war_capture_effect = {
 	if = {
-		limit = { debug_only = yes }
-		debug_log = "dbg_log prisoner_of_war_capture_effect"
-		debug_log_scopes = no
-		scope:new_target = { debug_log_scopes = no }
-		scope:imprisoner = { debug_log_scopes = no }
-		scope:barony ?= { debug_log_scopes = no }
+		limit = { NOT = { exists = scope:battle_loc }}
+		if = {
+			limit = { exists = scope:raider }
+			root.location = { save_scope_as = battle_loc }
+		}
+		else_if = {
+			limit = { exists = scope:army }
+			scope:army.location = { save_scope_as = battle_loc }
+		}
+		else_if = {
+			limit = { exists = scope:barony }
+			scope:barony.title_province = { save_scope_as = battle_loc }
+		}
+		else = {
+			scope:new_target.location = { save_scope_as = battle_loc }
+		}
 	}
 	if = {
-		limit = { NOT = { exists = scope:barony }}
-		scope:new_target.location.barony = { save_scope_as = barony }
-	}
-	scope:barony = {
+		limit = { NOT = { exists = scope:army }}
 		if = {
-			limit = { NOT = { exists = scope:army }}
-			if = {
-				limit = { exists = scope:raider }
-				root = { save_scope_as = army }
-			}
-			else = {
-				scope:barony.title_province = {
-					ordered_army_in_location = {
-						limit = {
-							army_owner = scope:imprisoner
-							exists = army_commander
-						}
-						save_scope_as = army
+			limit = { exists = scope:raider }
+			root = { save_scope_as = army }
+		}
+		else = {
+			scope:battle_loc = {
+				ordered_army_in_location = {
+					limit = {
+						army_owner = scope:imprisoner
+						exists = army_commander
 					}
+					order_by = army_size
+					save_scope_as = army
 				}
-				
 			}
 		}
-		scope:army ?= {
-			debug_log_scopes = no
-			if = {
-				limit = { exists = army_commander }
-				army_commander ?= {
-					scope:imprisoner = {
-						imprison = {
-							target = scope:new_target
-							type = prisoner_of_war
-						}
+	}
+	if = {
+		limit = { PoW_debug = yes }
+		debug_log = "dbg_log prisoner_of_war_capture_effect"
+		debug_log_scopes = no
+		scope:new_target = { debug_log = "new_target: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+		scope:imprisoner = { debug_log = "imprisoner: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+		scope:battle_loc ?= { debug_log = "battle loc: [THIS.Province.GetNameNoTooltip]" }
+		scope:army ?= { debug_log = "army: [THIS.Army.GetNameNoTooltip]" }
+	}
+	scope:army ?= {
+		if = {
+			limit = { exists = army_commander }
+			army_owner ?= {
+				scope:imprisoner = {
+					imprison = {
+						target = scope:new_target
+						type = prisoner_of_war
 					}
-					scope:new_target = { set_location = scope:barony.title_province }
-					debug_log_scopes = no
-					if = {
-						limit = { NOT = { exists = var:commander_story }}
-						create_story = PoW_commander_story
-					}
-					var:commander_story = {
-						add_to_variable_list = {
-							name = PoW
-							target = scope:new_target
-						}
+				}
+				scope:new_target = { set_location = scope:battle_loc }
+			}
+			army_commander = {
+				if = {
+					limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+					create_story = PoW_commander_story
+				}
+				var:commander_story = {
+					add_to_variable_list = {
+						name = PoW
+						target = scope:new_target
 					}
 				}
 			}
 		}
 	}
 }
+
 # [/PoW]

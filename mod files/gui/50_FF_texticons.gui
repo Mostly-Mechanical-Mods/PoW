@@ -1,0 +1,69 @@
+﻿texticon = {
+	icon = mmm_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_inherichance_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_inherichance_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_pow_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_pow_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_ltaf_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_ltaf_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_tot_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_tot_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_imho_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_imho_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mmm_bmu_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_bmu_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}

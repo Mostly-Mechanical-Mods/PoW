@@ -85,3 +85,7 @@ PoW_pay_ransom_interaction_is_valid_showing_failures_only = {
 		PAYER = scope:actor
 	}
 }
+
+PoW_release_from_prison_interaction_send_option_is_shown = {
+	scope:recipient = { NOT = { is_in_prison_type = prisoner_of_war }}
+}

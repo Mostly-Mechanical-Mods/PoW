@@ -1,0 +1,36 @@
+﻿PoW_loaded = {
+	
+	categories = {
+		mod_toggle mostly_mechanical_mods mmm_pow
+	}
+	
+	default = PoW_is_loaded
+
+	PoW_is_loaded = {
+		flag = GG_can_change_rule
+	}
+
+	PoW_is_loaded_debug = {
+		flag = GG_can_change_rule
+	}
+	
+	PoW_is_not_loaded = {
+		flag = GG_can_change_rule
+	}
+}
+
+# PoW_01_achievement = {
+# 	categories = {
+# 		GG_achievement
+# 	}
+
+# 	default = PoW_01_achievement_locked
+
+# 	PoW_01_achievement_locked = {
+# 		flag = GG_achievement
+# 	}
+
+# 	PoW_01_achievement_unlocked = {
+# 		flag = GG_achievement
+# 	}
+# }

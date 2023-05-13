@@ -1,0 +1,12 @@
+﻿FF_loaded = {
+	
+	categories = {
+		mod_toggle mostly_mechanical_mods mmm_ff
+	}
+	
+	default = FF_is_not_loaded
+
+	FF_is_not_loaded = {
+	}
+
+}
