@@ -67,3 +67,33 @@ texticon = {
 		fontsize = 16
 	}
 }
+
+texticon = {
+	icon = mmm_gg_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mmm_gg_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = mod_coop_icon
+	iconsize = {
+		texture = "gfx/mod_icons/mod_coop_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
+
+texticon = {
+	icon = vanilla_icon
+	iconsize = {
+		texture = "gfx/mod_icons/vanilla_icon.dds"
+		size = { 25 25 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}

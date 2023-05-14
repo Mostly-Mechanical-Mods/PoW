@@ -2,8 +2,8 @@
 
 PoW_foundational_framework_required: "Foundational Framework required"
 
-game_rule_category_mod_toggle: "Mods Enabled"
-game_rule_category_mostly_mechanical_mods: "Mostly Mechanical Mods"
+game_rule_category_mod_toggle: "@mod_coop_icon! Mods Enabled"
+game_rule_category_mostly_mechanical_mods: "@mmm_icon! Mostly Mechanical Mods"
 game_rule_category_mmm_pow: "@mmm_pow_icon! Prisoners of War"
 
 rule_PoW_loaded: "@mmm_pow_icon! Enable [mmm_pow|E]"
