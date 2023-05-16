@@ -3,3 +3,13 @@
 PoW_is_loaded = { NOT = { has_game_rule = PoW_is_not_loaded }}
 
 PoW_debug = { has_game_rule = PoW_is_loaded_debug }
+
+PoW_is_loaded_prisoner_transit_enabled = {
+	NOT = { has_game_rule = PoW_is_not_loaded }
+	has_game_rule = PoW_prisoner_transit_enabled
+}
+
+PoW_is_loaded_gather_commanders_enabled = {
+	NOT = { has_game_rule = PoW_is_not_loaded }
+	has_game_rule = PoW_gather_commanders_enabled
+}

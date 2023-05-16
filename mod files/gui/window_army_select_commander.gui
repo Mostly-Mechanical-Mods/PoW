@@ -373,7 +373,7 @@ types army_select_commander
 
 				hbox = {
 					spacing = 5
-					visible = "[And(Not(Character.IsPlayerInteractionShown('recruit_guest_interaction')),Not(EqualTo_uint32(CSelectCommanderWindow.GetArmy.GetLocation.GetID,CharacterListItem.GetCharacter.GetCurrentLocation.GetID)))]"
+					visible = "[Character.MakeScope.Var('commander_gather_eta').IsSet]"
 					text_single = {
 						text = POW_COMMANDER_GATHER_ETA
 					}
