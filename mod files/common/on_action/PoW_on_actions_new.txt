@@ -299,7 +299,7 @@ on_commander_transfer_PoW = {
 
 on_travel_plan_movement_debug = {
 	trigger = {
-		PoW_is_loaded = yes
+		has_game_rule = PoW_is_loaded_debug
 		is_ai = no
 	}
 	effect = {
@@ -398,6 +398,70 @@ PoW_prisoner_transfer_to_army = {
 			}
 			else = {
 				PoW_liberate_prisoners = yes
+			}
+		}
+	}
+}
+
+
+random_yearly_everyone_pulse = {
+	on_actions = {
+		PoW_prisoner_status_fallback
+	}
+}
+
+PoW_prisoner_status_fallback = {
+	trigger = { is_in_prison_type = prisoner_of_war }
+	effect = {
+		if = {
+			limit = { location = imprisoner.capital_county }
+			change_prison_type = dungeon
+		}
+		else_if = {
+			limit = {
+				location = {
+					any_character_in_location = {
+						OR = {
+							any_owned_story = {
+								story_type = PoW_commander_story
+								is_target_in_variable_list = {
+									name = PoW
+									target = root
+								}
+							}
+							AND = {
+								is_travelling = yes
+								current_travel_plan = {
+									is_target_in_variable_list = {
+										name = PoW
+										target = root
+									}
+								}
+							}
+						}
+						count = 0
+					}
+				}
+			}
+			location = { save_scope_as = current_location }
+			release_from_prison = yes
+			if = {
+				limit = { is_landed = yes }
+				capital_province = { save_scope_as = home }
+			}
+			else = { court_owner.capital_province ?= { save_scope_as = home }}
+			if = {
+				limit = { exists = scope:home }
+				if = { limit = { PoW_debug = yes } scope:home = { debug_log_scopes = no }}
+				set_location = scope:current_location
+				start_travel_plan = {
+					destination = scope:home
+					players_use_planner = no
+					return_trip = no
+				}
+			}
+			else = {
+				move_to_pool = yes
 			}
 		}
 	}
