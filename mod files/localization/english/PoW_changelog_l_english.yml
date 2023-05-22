@@ -1,0 +1,23 @@
+﻿l_english:
+
+PoW_changelog_alert: "[mmm_pow|E] update"
+PoW_changelog_alert_desc: "[mmm_pow|E] has updated since you started this playthrough"
+PoW_changelog_alert_click: "#P #italic Left-click to read Changelog and remove the alert#!#!"
+
+PoW_changelog_alert_interaction: "[mmm_pow|E] Changelog"
+PoW_changelog_alert_interaction_desc: "Changelog for [mmm_pow|E]"
+PoW_changelog_alert_interaction_send: "Apply Patch"
+PoW_changelog_alert_introduction: "[mmm_pow|E] has updated since you started this playthrough."
+PoW_v1_1_1_changelog: "#bold PoW v1.1.1#!"
+PoW_v1_1_1_changelog_patch: "@warning_icon! #warning A patch will be applied to your savegame.#! If this save is important to you, consider making a backup in case things go horribly wrong before applying the patch. If necessary, a release of the previous version 1.0.6 is available on github.com/Mostly-Mechanical-Mods/PoW/"
+PoW_v1_1_1_changelog_1: "New feature: [pow_prisoner_release_travel|E]. Added a game rule for turning it off."
+PoW_v1_1_1_changelog_2: "Added a game rule for turning [pow_gather_commanders|E] off."
+PoW_v1_1_1_changelog_3: "Added a game rule for turning [pow_prisoner_transit|E] off."
+PoW_v1_1_1_changelog_4: "All travels created by [pow_gather_commanders|E] and [pow_prisoner_transit|E] block travel events by default, but game rule settings can enable those events back."
+PoW_v1_1_1_changelog_5: "All new game rules are supported by [mmm_gg|E]."
+PoW_v1_1_1_changelog_6: "Added a yearly fallback to teleport [prisoners_of_war|E] stuck in limbo to the dungeon."
+PoW_v1_1_1_changelog_7: "Fixed ETA calculations on [pow_gather_commanders|E] disrupting existing travel plans."
+PoW_v1_1_1_changelog_8: "Gathering Commanders get a +50% travel plan speed modifier to ensure they catch up with the army."
+PoW_v1_1_1_changelog_9: "Fixed [mmm_ff|E] alert popping up even when it is loaded."
+PoW_v1_1_1_changelog_10: "Added this very nifty feature of a Changelog Alert popping up if the save was started on an earlier version of the mod."
+PoW_v1_1_1_changelog_11: "Compat: Knight Manager now supported by [mmm_ff|E]"

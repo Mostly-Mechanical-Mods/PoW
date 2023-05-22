@@ -1,0 +1,71 @@
+﻿PoW_changelog_alert_interaction = {
+	interface_priority = 120
+	common_interaction = yes
+	icon = mmm_pow_icon
+
+	category = interaction_debug_main
+
+	desc = PoW_changelog_alert_interaction_desc
+
+	send_name = PoW_changelog_alert_interaction_send
+
+	is_shown = {
+		scope:actor = scope:recipient
+		NOT = { has_global_variable = PoW_v1_1_1 }
+	}
+
+	is_valid_showing_failures_only = {
+		
+	}
+
+	can_send = {
+
+	}
+	
+	is_highlighted = {
+
+	}
+
+	auto_accept = {
+	}
+
+	on_send = {
+		set_global_variable = PoW_v1_1_1
+	}
+
+	on_auto_accept = {
+		
+	}
+
+	on_accept = {
+		scope:actor = { add_to_list = debug }
+		every_in_list = {
+			list = debug
+			custom = PoW_changelog_alert_introduction
+		}
+		if = {
+			limit = { NOT = { has_global_variable = PoW_v1_1_1 }}
+			every_in_list = {
+				list = debug
+				custom = PoW_v1_1_1_changelog
+				custom_tooltip = PoW_v1_1_1_changelog_patch
+				custom_tooltip = PoW_v1_1_1_changelog_1
+				custom_tooltip = PoW_v1_1_1_changelog_2
+				custom_tooltip = PoW_v1_1_1_changelog_3
+				custom_tooltip = PoW_v1_1_1_changelog_4
+				custom_tooltip = PoW_v1_1_1_changelog_5
+				custom_tooltip = PoW_v1_1_1_changelog_6
+				custom_tooltip = PoW_v1_1_1_changelog_7
+				custom_tooltip = PoW_v1_1_1_changelog_8
+				custom_tooltip = PoW_v1_1_1_changelog_9
+				custom_tooltip = PoW_v1_1_1_changelog_10
+				custom_tooltip = PoW_v1_1_1_changelog_11
+			}
+			hidden_effect = { PoW_v1_1_1_patch = yes }
+		}
+	}
+		
+	on_decline = {
+		
+	}
+}

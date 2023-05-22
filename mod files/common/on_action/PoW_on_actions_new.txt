@@ -5,6 +5,7 @@ on_game_start_PoW = {
 			name = PoW_is_loaded
 			value = yes
 		}
+		set_global_variable = PoW_v1_1_1
 	}
 }
 
@@ -13,8 +14,8 @@ on_game_start_PoW = {
 # scope:army is the army
 on_army_enter_province = {
 	on_actions = {
-		PoW_commander_story
-		PoW_commander_story_update
+		PoW_commander_story_setup
+		PoW_gather_commander_update
 		PoW_delivery
 		PoW_on_army_enter_province_debug
 		# PoW_location_update
@@ -36,9 +37,12 @@ PoW_on_army_enter_province_debug = {
 	}
 }
 
-PoW_commander_story = {
+PoW_commander_story_setup = {
 	trigger = {
-		PoW_is_loaded = yes
+		OR = {
+			PoW_is_loaded_gather_commanders_enabled = yes
+			PoW_is_loaded_prisoner_transit_enabled = yes
+		}
 		scope:army.army_commander ?= { NOT = { any_owned_story = { story_type = PoW_commander_story }}}
 	}
 	effect = {
@@ -53,9 +57,9 @@ PoW_commander_story = {
 	}
 }
 
-PoW_commander_story_update = {
+PoW_gather_commander_update = {
 	trigger = {
-		PoW_is_loaded = yes
+		PoW_is_loaded_gather_commanders_enabled = yes
 		scope:army = { has_variable = commander_gather }
 	}
 	effect = {
@@ -72,9 +76,8 @@ PoW_commander_story_update = {
 
 PoW_delivery = {
 	trigger = {
-		PoW_is_loaded = yes
 		scope:new_location = scope:army.army_owner.capital_province
-		scope:army.army_commander.var:commander_story ?= {
+		scope:army.army_commander ?= {
 			any_in_list = { variable = PoW count > 0 }
 		}
 	}
@@ -84,11 +87,23 @@ PoW_delivery = {
 			debug_log = "PoW_delivery"
 			debug_log_scopes = yes
 		}
-		scope:army.army_commander.var:commander_story = {
+		scope:army.army_commander = {
 			every_in_list = {
 				variable = PoW
 				save_scope_as = PoW
 				if = {
+					limit = { is_imprisoned = no }
+					debug_log = "PoW_delivery not prisoner"
+					debug_log_scopes = no
+					prev = {
+						remove_list_variable = {
+							name = PoW
+							target = prev
+						}
+					}
+					remove_variable = PoW
+				}
+				else_if = {
 					limit = {
 						OR = {
 							is_at_war_with = scope:army.army_owner
@@ -102,13 +117,9 @@ PoW_delivery = {
 					change_prison_type = house_arrest
 				}
 				else = { change_prison_type = dungeon }
-				prev = {
-					remove_list_variable = {
-						name = PoW
-						target = prev
-					}
-				}
+				remove_variable = PoW
 			}
+			clear_variable_list = PoW
 		}
 	}
 }
@@ -119,126 +130,58 @@ PoW_delivery = {
 #Triggered by code
 on_death = {
 	on_actions = {
-		PoW_on_death_commander
+		PoW_on_death_prisoner_transit_PoW
+		PoW_on_death_prisoner_transit_commander
 	}
 }
 
-PoW_on_death_commander = {
+PoW_on_death_prisoner_transit_PoW = {
+	trigger = { has_variable = PoW }
+	effect = {
+		var:PoW = {
+			remove_list_variable = {
+				name = PoW
+				target = prev
+			}
+		}
+	}
+}
+
+PoW_on_death_prisoner_transit_commander = {
 	trigger = {
-		PoW_is_loaded = yes
-		is_commanding_army = yes
-		exists = current_travel_plan
+		any_in_list = { variable = PoW count > 0 }
+		NOT = { owns_story_of_type = PoW_commander_story }
 	}
 	effect = {
-		current_travel_plan.current_location = { save_scope_as = current_location }
-		commanding_army.army_owner = {
-			ordered_knight = {
-				limit = {
-					is_in_army = root.commanding_army
-					is_commanding_army = no
-					is_travelling = no
-				}
-				order_by = martial
-				save_scope_as = new_commander
-			}
-		}
-		if = {
-			limit = { exists = scope:new_commander }
-			commanding_army = { assign_commander = scope:new_commander }
-			scope:new_commander = {
-				set_location = scope:current_location
-			}
-			current_travel_plan = {
-				set_travel_plan_owner = scope:new_commander
-			}
-		}
-		else = {
-			current_travel_plan = {
-				every_entourage_character = {
-					limit = { is_imprisoned = yes }
-					add_to_list = released_prisoners
-					if = {
-						limit = { is_landed = yes }
-						capital_province = { add_to_list = destinations }
-					}
-					else = { liege_or_court_owner.capital_province = { add_to_list = destinations }}
-					release_from_prison = yes
-					set_location = scope:current_location
-				}
-			}
-			every_in_list = {
-				list = destinations
-				save_scope_as = destination
-				ordered_in_list = {
-					list = released_prisoners
-					limit = {
-						OR = {
-							capital_province ?= prev
-							liege_or_court_owner.capital_province ?= prev
-						}
-					}
-					order_by = {
-						value = 1
-						add = highest_held_title_tier
-						multiply = 10
-						if = {
-							limit = { is_adult = no }
-							multiply = 0
-						}
-					}
-					start_travel_plan = { 
-						destination = scope:destination
-						players_use_planner = no
-						return_trip = no
-					}
-					current_travel_plan = { save_scope_as = new_travel_plan }
-					every_in_list = {
-						list = released_prisoners
-						limit = {
-							NOT = { this = prev }
-							OR = {
-								capital_province ?= prev
-								liege_or_court_owner.capital_province ?= prev
-							}
-						}
-						scope:new_travel_plan = { add_companion = prev }
-					}
-				}
-			}
-		}
+		PoW_liberate_prisoners = yes
 	}
 }
 
-on_war_won_attacker = { on_actions = { on_war_won_PoW }}
-on_war_won_defender = { on_actions = { on_war_won_PoW }}
-on_war_white_peace = { on_actions = { on_war_won_PoW }}
-on_war_invalidated = { on_actions = { on_war_won_PoW }}
-
-on_war_won_PoW = {
-	
+on_travel_plan_movement = {
+	on_actions = {
+		PoW_on_travel_plan_movement_gather_commanders
+		PoW_on_travel_plan_movement_prisoner_transit
+		on_travel_plan_movement_debug
+	}
 }
 
-escape_from_prison_success = { on_actions = { escape_from_prison_success_PoW }}
-escape_from_prison_success_PoW = {
-
+on_travel_plan_complete = {
+	on_actions = {
+		PoW_on_travel_plan_movement_gather_commanders
+		PoW_on_travel_plan_complete_prisoner_transit
+	}
 }
 
-on_release_from_prison = { on_actions = { on_release_from_prison_PoW }}
-on_release_from_prison_PoW = {
-
-}
-
-on_commander_travel_to_army = {
+PoW_on_travel_plan_movement_gather_commanders = {
 	trigger = {
-		PoW_is_loaded = yes
-		current_travel_plan = { has_variable = PoW_commander_gather }
+		current_travel_plan ?= { has_variable = PoW_gather_commanders }
 	}
 	effect = {
 		if = {
 			limit = { PoW_debug = yes} 
 			debug_log = "on_commander_travel_to_army - Commander [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip] - Location [THIS.Char.GetCurrentLocation.GetNameNoTooltip] - Army [THIS.Char.GetTravelPlan.MakeScope.Var('army').Army.GetNameNoTooltip]"
 		}
-		current_travel_plan = {
+		current_travel_plan ?= {
 			if = {
 				limit = { NOT = { exists = var:army }}
 				reroute_to_home = yes
@@ -264,34 +207,16 @@ on_commander_travel_to_army = {
 	}
 }
 
-on_travel_plan_movement = {
-	on_actions = {
-		on_commander_travel_to_army
-		on_commander_transfer_PoW
-		on_travel_plan_movement_debug
-	}
-}
-
-on_travel_plan_complete = {
-	on_actions = {
-		PoW_transfer_to_dungeon
-		on_commander_travel_to_army
-	}
-}
-
-on_commander_transfer_PoW = {
+PoW_on_travel_plan_movement_prisoner_transit = {
 	trigger = {
-		PoW_is_loaded = yes
-		current_travel_plan = { has_variable = PoW_transfer }
+		current_travel_plan = { has_variable = PoW_prisoner_transit }
 	}
 	effect = {
-		current_travel_plan = {
-			every_in_list = {
-				variable = PoW
-				set_location = {
-					location = prev.current_location
-					stick_to_location = yes
-				}
+		every_in_list = {
+			variable = PoW
+			set_location = {
+				location = prev.location
+				stick_to_location = yes
 			}
 		}
 	}
@@ -299,7 +224,7 @@ on_commander_transfer_PoW = {
 
 on_travel_plan_movement_debug = {
 	trigger = {
-		has_game_rule = PoW_is_loaded_debug
+		PoW_debug = yes
 		is_ai = no
 	}
 	effect = {
@@ -309,15 +234,22 @@ on_travel_plan_movement_debug = {
 	}
 }
 
-PoW_transfer_to_dungeon = {
-	trigger = {
-		PoW_is_loaded = yes
-		current_travel_plan = { has_variable = PoW_transfer }
-	}
+PoW_on_travel_plan_complete_prisoner_transit = {
+	trigger = { current_travel_plan = { has_variable = PoW_prisoner_transit }}
 	effect = {
-		current_travel_plan = {
-			every_in_list = {
-				variable = PoW
+		every_in_list = {
+			variable = PoW
+			if = {
+				limit = { is_imprisoned = no }
+				prev = {
+					remove_list_variable = {
+						name = PoW
+						target = prev
+					}
+				}
+				remove_variable = PoW
+			}
+			else = {
 				if = {
 					limit = {
 						exists = liege
@@ -330,14 +262,11 @@ PoW_transfer_to_dungeon = {
 					change_prison_type = house_arrest
 				}
 				else = { change_prison_type = dungeon }
+				remove_variable = PoW
 			}
 		}
-	}
-}
-
-on_travel_plan_complete = {
-	on_actions = {
-		PoW_transfer_to_dungeon
+		clear_variable_list = PoW
+		current_travel_plan = { remove_variable = PoW_prisoner_transit }
 	}
 }
 
@@ -350,10 +279,9 @@ on_combat_end_loser = {
 PoW_prisoner_transfer_to_army = {
 	trigger = {
 		PoW_is_loaded = yes
-		exists = side_commander
-		side_commander = {
+		side_commander ?= {
 			owns_story_of_type = PoW_commander_story
-			var:commander_story = { any_in_list = { variable = PoW count > 0 }}
+			any_in_list = { variable = PoW count > 0 }
 		}
 	}
 	effect = {
@@ -365,11 +293,9 @@ PoW_prisoner_transfer_to_army = {
 				limit = { NOT = { owns_story_of_type = PoW_commander_story }}
 				create_story = PoW_commander_story
 			}
-			var:commander_story = {
-				save_scope_as = PoW_transfer
-			}
+			save_scope_as = PoW_transfer
 		}
-		side_commander.var:commander_story = {
+		side_commander = {
 			if = {
 				limit = { exists = scope:PoW_transfer }
 				every_in_list = {
@@ -385,14 +311,33 @@ PoW_prisoner_transfer_to_army = {
 						limit = { is_imprisoned = no }
 						debug_log = "BUG: Not imprisoned"
 					}
-					release_from_prison = yes
-					root.side_primary_participant = {
-						imprison = {
-							target = prev
-							type = prisoner_of_war
+					
+					if = {
+						limit = { is_imprisoned = no }
+						prev = {
+							remove_list_variable = {
+								name = PoW
+								target = prev
+							}
 						}
+						remove_variable = PoW
 					}
-					set_location = prev.var:location
+					else = {
+						add_character_flag = {
+							flag = block_for_prison_release_notification 
+							days = 1
+						}
+						set_variable = PoW_transfer
+						release_from_prison = yes
+						prev.var:commander_story.var:army_owner = {
+							imprison = {
+								target = prev
+								type = prisoner_of_war
+							}
+						}
+						set_location = prev.var:commander_story.var:location
+						remove_variable = PoW_transfer
+					}
 				}
 				clear_variable_list = PoW
 			}
@@ -406,63 +351,216 @@ PoW_prisoner_transfer_to_army = {
 
 random_yearly_everyone_pulse = {
 	on_actions = {
-		PoW_prisoner_status_fallback
+		PoW_random_yearly_everyone_pulse_prisoner_status_fallback
 	}
 }
 
-PoW_prisoner_status_fallback = {
-	trigger = { is_in_prison_type = prisoner_of_war }
+PoW_random_yearly_everyone_pulse_prisoner_status_fallback = {
+	trigger = {
+		exists = var:PoW_prison_location
+	}
 	effect = {
 		if = {
-			limit = { location = imprisoner.capital_county }
-			change_prison_type = dungeon
+			limit = { is_imprisoned = no }
+			remove_variable = PoW_prison_location
+			remove_variable = PoW_current_location
+			remove_variable = PoW
 		}
 		else_if = {
 			limit = {
-				location = {
-					any_character_in_location = {
-						OR = {
-							any_owned_story = {
-								story_type = PoW_commander_story
-								is_target_in_variable_list = {
-									name = PoW
-									target = root
-								}
-							}
-							AND = {
-								is_travelling = yes
-								current_travel_plan = {
-									is_target_in_variable_list = {
-										name = PoW
-										target = root
-									}
-								}
-							}
+				has_variable = PoW_current_location
+				var:PoW ?= {
+					is_commanding_army = no
+					current_travel_plan ?= {
+						NOR = {
+							has_variable = PoW_prisoner_transit
+							has_variable = PoW_gather_commanders
 						}
-						count = 0
 					}
 				}
 			}
-			location = { save_scope_as = current_location }
-			release_from_prison = yes
+			escape_from_prison_effect = yes
+		}
+		else_if = {
+			limit = { location = imprisoner.capital_province }
+			if = {
+				limit =  { is_in_prison_type = prisoner_of_war }
+				if = {
+					limit = {
+						exists = liege
+						OR = {
+							is_landed = yes
+							is_close_or_extended_family_of = liege
+							is_spouse_of = liege
+						}
+					}
+					change_prison_type = house_arrest
+				}
+				else = { change_prison_type = dungeon }
+			}
+			remove_variable = PoW_current_location
+			remove_variable = PoW
+			set_variable = {
+				name = PoW_prison_location
+				value = location
+			}
+		}
+		else = {
+			remove_variable = PoW_current_location
+			remove_variable = PoW
+			set_location = {
+				location = imprisoner.capital_province
+				stick_to_location = yes
+			}
+			set_variable = {
+				name = PoW_prison_location
+				value = location
+			}
+		}
+	}
+}
+
+on_imprison = {
+	on_actions = {
+		PoW_on_imprison
+	}
+}
+
+PoW_on_imprison = {
+	effect = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_on_imprison"
+			debug_log_scopes = yes
+		}
+		set_variable = {
+			name = PoW_prison_location
+			value = scope:imprisoner.capital_province
+		}
+	}
+}
+
+
+on_release_from_prison = {
+	on_actions = {
+		PoW_on_release_from_prison
+	}
+}
+
+PoW_on_release_from_prison = {
+	trigger = {
+		PoW_is_loaded = yes
+		trigger_if = {
+			limit = {
+				OR = {
+					has_game_rule = PoW_prisoner_release_travel_PoW
+					has_game_rule = PoW_prisoner_release_travel_PoW_events
+				}
+			}
+			has_variable = PoW
+			NOT = { has_variable = PoW_transfer }
+		}
+	}
+	effect = {
+		if = {
+			limit = { PoW_debug = yes }
+			debug_log = "PoW_on_release_from_prison"
+			debug_log_scopes = yes
+			location = { debug_log_scopes = no }
+		}
+		if = {
+			limit = { is_pool_character = no }
+			if = {
+				limit = { has_variable = PoW_current_location }
+				var:PoW_current_location ?= { save_scope_as = starting_location }
+			}
+			else_if = {
+				limit = { has_variable = PoW_prison_location }
+				var:PoW_prison_location = { save_scope_as = starting_location }
+			}
 			if = {
 				limit = { is_landed = yes }
 				capital_province = { save_scope_as = home }
 			}
-			else = { court_owner.capital_province ?= { save_scope_as = home }}
+			else = {
+				liege_or_court_owner.capital_province ?= { save_scope_as = home }
+			}
 			if = {
-				limit = { exists = scope:home }
-				if = { limit = { PoW_debug = yes } scope:home = { debug_log_scopes = no }}
-				set_location = scope:current_location
-				start_travel_plan = {
-					destination = scope:home
-					players_use_planner = no
-					return_trip = no
+				limit = {
+					exists = scope:home
+					exists = scope:starting_location
+					scope:home != scope:starting_location
+				}
+				if = {
+					limit = { PoW_debug = yes }
+					scope:starting_location ?= { debug_log = "starting_location [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]" }
+					scope:home = { debug_log = "home [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]" }
+				}
+				if = {
+					limit = { exists = scope:starting_location }
+					start_travel_plan = {
+						destination = scope:home
+						players_use_planner = no
+						return_trip = no
+					}
+					current_travel_plan = {
+						set_variable = block_travel_plan_home_button
+						set_variable = block_travel_plan_customize_button
+						set_variable = PoW_prisoner_release
+						if = {
+							limit = {
+								NOR = {
+									has_game_rule = PoW_prisoner_release_travel_all_events
+									has_game_rule = PoW_prisoner_release_travel_PoW_events
+								}
+							}
+							set_variable = FF_vanilla_on_travel_plan_movement_blocker
+							set_variable = FF_vanilla_on_travel_plan_arrival_blocker
+							set_variable = FF_vanilla_on_travel_plan_start_blocker
+							set_variable = FF_vanilla_on_travel_plan_complete_blocker
+							set_variable = FF_vanilla_on_travel_plan_abort_blocker
+							set_variable = FF_vanilla_on_travel_leader_removed_blocker
+						}
+					}
 				}
 			}
-			else = {
-				move_to_pool = yes
+			else_if = {
+				limit = { PoW_debug = yes }
+				if = {
+					limit = { NOT = { exists = scope:starting_location }}
+					debug_log = "No scope:starting_location to travel from"
+				}
+				else = { scope:home = { debug_log = "scope:starting_location [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]" }}
+				if = {
+					limit = { NOT = { exists = scope:home }}
+					debug_log = "No scope:home to travel to"
+				}
+				else = { scope:home = { debug_log = "scope:home [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]" }}
 			}
 		}
+		var:PoW ?= {
+			remove_list_variable = {
+				name = PoW
+				target = prev
+			}
+		}
+		remove_variable = PoW_current_location
+		remove_variable = PoW_prison_location
+		remove_variable = PoW
+	}
+}
+
+on_travel_plan_start = {
+	on_actions = {
+		PoW_on_travel_plan_start
+	}
+}
+
+PoW_on_travel_plan_start = {
+	trigger = {
+		current_travel_plan = { has_variable = PoW_prisoner_release }
+	}
+	effect = {
+		set_location = current_travel_plan.current_location
 	}
 }

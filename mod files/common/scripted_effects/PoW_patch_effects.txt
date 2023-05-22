@@ -1,0 +1,145 @@
+﻿PoW_v1_1_1_patch = {
+	set_global_variable = PoW_v1_1_1
+	every_living_character = {
+		if = {
+			limit = {
+				OR = {
+					owns_story_of_type = PoW_commander_story
+					current_travel_plan ?= {
+						any_in_list = {
+							variable = PoW
+							count > 0
+						}
+					}
+				}
+			}
+			add_to_list = commanders
+		}
+		if = {
+			limit = { is_imprisoned = yes }
+			set_variable = {
+				name = PoW_prison_location
+				value = imprisoner.capital_province
+			}
+			remove_variable = PoW
+			if = {
+				limit = { is_in_prison_type = prisoner_of_war }
+				add_to_list = PoWs
+			}
+			else_if = {
+				limit = { NOT = { location = var:PoW_prison_location }}
+				set_location = {
+					location = var:PoW_prison_location
+					stick_to_location = yes
+				}
+			}
+		}
+	}
+	every_in_list = {
+		list = commanders
+		save_scope_as = commander
+		if = {
+			limit = { owns_story_of_type = PoW_commander_story }
+			var:commander_story ?= {
+				every_in_list = {
+					variable = PoW
+					if = {
+						limit = { is_in_list = PoWs }
+						set_variable = {
+							name = PoW
+							value = scope:commander
+						}
+						set_variable = {
+							name = PoW_current_location
+							value = scope:commander.location
+						}
+						scope:commander = {
+							add_to_variable_list = {
+								name = PoW
+								target = prev
+							}
+						}
+						remove_from_list = PoWs
+					}
+					else_if = {
+						limit = {
+							is_alive = yes
+							is_imprisoned = no
+						}
+						remove_variable = PoW
+					}
+				}
+				clear_variable_list = PoW
+			}
+		}
+		else = {
+			current_travel_plan ?= {
+				set_variable = PoW_prisoner_transit
+				if = {
+					limit = {
+						NOR = {
+							has_game_rule = PoW_prisoner_release_travel_all_events
+							has_game_rule = PoW_prisoner_release_travel_PoW_events
+						}
+					}
+					set_variable = FF_vanilla_on_travel_plan_movement_blocker
+					set_variable = FF_vanilla_on_travel_plan_arrival_blocker
+					set_variable = FF_vanilla_on_travel_plan_start_blocker
+					set_variable = FF_vanilla_on_travel_plan_complete_blocker
+					set_variable = FF_vanilla_on_travel_plan_abort_blocker
+					set_variable = FF_vanilla_on_travel_leader_removed_blocker
+				}
+				every_in_list = {
+					variable = PoW
+					if = {
+						limit = { is_in_list = PoWs }
+						set_variable = {
+							name = PoW
+							value = scope:commander
+						}
+						set_variable = {
+							name = PoW_current_location
+							value = scope:commander.location
+						}
+						scope:commander = {
+							add_to_variable_list = {
+								name = PoW
+								target = prev
+							}
+						}
+						remove_from_list = PoWs
+					}
+					else_if = {
+						limit = {
+							is_alive = yes
+							is_imprisoned = no
+						}
+						remove_variable = PoW
+					}
+				}
+				clear_variable_list = PoW
+			}
+		}
+	}
+	every_in_list = {
+		list = PoWs
+		if = {
+			limit = { location = imprisoner.capital_province }
+			if = {
+				limit = {
+					exists = liege
+					OR = {
+						is_landed = yes
+						is_close_or_extended_family_of = liege
+						is_spouse_of = liege
+					}
+				}
+				change_prison_type = house_arrest
+			}
+			else = { change_prison_type = dungeon }
+		}
+		else = {
+			escape_from_prison_effect = yes
+		}
+	}
+}

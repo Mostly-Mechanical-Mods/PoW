@@ -1,18 +1,18 @@
 ﻿l_english:
 
   prisontype_pow: "Prisoner of War"
-  POW_CAPTUREDBY: "Captured by [Character.GetImprisonedBy.GetName]\nLocation : [Character.GetCurrentLocation.GetName]"
-  POW_CAPTUREDBY_SHORT: "Captured by [Character.MakeScope.Var('story_PoW').Var('story_army').Army.GetName]"
+  POW_CAPTUREDBY: "Captured by [Character.MakeScope.Var('PoW').Char.GetShortUIName]\nLocation : [Character.GetCurrentLocation.GetName]"
+  POW_CAPTUREDBY_SHORT: "Captured by [Character.MakeScope.Var('PoW').Char.GetShortUIName]"
   POW_LOCATION: "Location : [Character.GetCurrentLocation.GetName]"
-  POW_NB_IN_UNIT: "Prisoners of War in army : [GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.Var('commander_story').GetList('PoW'))]"
-  POW_NB_IN_ARMY: "Prisoners of War in army : [GetDataModelSize(Army.GetCommander.MakeScope.Var('commander_story').GetList('story_PoW_list'))]"
+  POW_NB_IN_UNIT: "Prisoners of War in army : [GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.GetList('PoW'))]"
+  POW_NB_IN_ARMY: "Prisoners of War in army : [GetDataModelSize(Army.GetCommander.MakeScope.GetList('story_PoW_list'))]"
   CAPTURED_FOR: "[Character.MakeScope.ScriptValue('get_days_in_prison')|0] days ago"
 
-  ARMY_IS_RAIDING: "[CHARACTER.GetName] is held by [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], which is currently raiding"
-  ARMY_IN_COMBAT: "is held by [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], which is currently engaged in combat"
-  ARMY_AT_SEA: "is held by [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], which is at sea in [CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetLocation.GetName]"
-  ARMY_IN_WRONG_LOCATION: "is held by [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], located in [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName], which isn't owned by [CHARACTER.GetName], who would be paying the ransom"
-  ARMY_IN_WRONG_LOCATION_FIRST: "is held by [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_army').Army.GetName], located in [TARGET_CHARACTER.MakeScope.Var('story_PoW').Var('story_location').Province.GetCounty.GetName], which you do not own"
+  ARMY_IS_RAIDING: "[CHARACTER.GetName] is held by [CHARACTER.MakeScope.Var('PoW').Char.GetShortUIName], which is currently raiding"
+  ARMY_IN_COMBAT: "is held by [CHARACTER.MakeScope.Var('PoW').Char.GetShortUIName], which is currently engaged in combat"
+  ARMY_AT_SEA: "is held by [CHARACTER.MakeScope.Var('PoW').Char.GetShortUIName], which is at sea in [CHARACTER.MakeScope.Var('PoW').Char.GetCurrentLocation.GetName]"
+  ARMY_IN_WRONG_LOCATION: "is held by [TARGET_CHARACTER.MakeScope.Char.GetShortUIName], located in [TARGET_CHARACTER.MakeScope.Var('PoW').Char.GetCurrentLocation.GetCounty.GetName], which isn't owned by [CHARACTER.GetName], who would be paying the ransom"
+  ARMY_IN_WRONG_LOCATION_FIRST: "is held by [TARGET_CHARACTER.MakeScope.Var('PoW').Char.GetShortUIName], located in [TARGET_CHARACTER.MakeScope.Var('PoW').Char.GetCurrentLocation.GetName], which you do not own"
   POW_IS_BARGAINING_CHIP: "[CHARACTER.GetNameNoTooltip] is an important bargaining chip in the on-going war against [TARGET_CHARACTER.GetName]"
 
   POW_CAPTURED_FROM: "Captured from [Character.GetLiege.GetName]"
@@ -21,3 +21,9 @@
   POW_COMMANDER_GATHER_ETA: "#italic [Character.MakeScope.Var('commander_gather_eta').GetValue] days#!"
 
 prisoner_of_war: "Prisoner Transit"
+PoW_gather_commanders: "Rallying with troops"
+
+COURT_POSITION_CATEGORY_COMMANDER_NAME: "Commanders"
+commander_base_court_position: "Commander"
+commander_base_court_position_desc: "Commander"
+commander_employer_custom_effect_description: "test"

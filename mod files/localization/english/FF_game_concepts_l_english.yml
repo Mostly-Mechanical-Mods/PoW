@@ -1,0 +1,44 @@
+﻿l_english:
+
+game_concept_mmm: "Mostly Mechanical Mods"
+game_concept_mmm_desc: "Mostly Mechanical Mods is a collection of mods that focus on the mechanical aspect of game design that includes:\n@mmm_pow_icon! [mmm_pow|E]\n@mmm_imho_icon! [mmm_imho|E]\n@mmm_inherichance_icon! [mmm_inherichance|E]\n@mmm_tot_icon! [mmm_tot|E]"
+
+game_concept_mmm_inherichance: "Inherichance"
+game_concept_mmm_inherichance_desc: "When you die, which heir you get to play as next is picked at random, to spice things up.\n\nOr you can change a gamerule to always play as the weakest heir, if you're feeling [GetTrait('sadistic').GetName(GetNullCharacter)]."
+
+game_concept_mmm_pow: "Prisoners of War"
+game_concept_mmm_pow_desc: "Commanders and Prisoners make full use of the travel system thanks to three new features:\n[pow_gather_commanders|E]\n[pow_prisoner_transit|E]\n[pow_prisoner_release_travel|E]"
+
+game_concept_mmm_imho: "In My Humble Opinion"
+game_concept_mmm_imho_desc: "You can see the opinion your character has of other characters.\n\nAdditional settings:\n[imho_player_personality|E]\n[imho_pov_opinion|E]"
+
+game_concept_mmm_tot: "Trick or Trait"
+game_concept_mmm_tot_desc: "Inheritable traits are hidden on birth.\n\nThey will get unveiled over the course of childhood through appropriate events, or when the child comes of age at the latest."
+
+game_concept_mmm_ff: "Foundational Framework"
+game_concept_mmm_ff_desc: "Utility mod that supports mod compatibility without requiring compatches.\n\nSupported mods:\nMostly Mechanical Mods"
+
+game_concept_mmm_bmu: "Back Me Up"
+game_concept_mmm_bmu_desc: "#weak Coming Soon#!"
+
+game_concept_mmm_gg: "Gamerule Gadget"
+game_concept_mmm_gg_desc: "Utility mod that enables changing game rules on an existing save"
+
+# IMHO
+
+game_concept_imho_pov_opinion: "Third-Party Opinion"
+game_concept_imho_pov_opinion_desc: "The @imho_pov_opinion_icon! button in the [interaction|E] Menu enables you to track that character's opinion of others.\n@imho_pov_opinion_1!\n\nOpen the [interaction|E] menu on another character to display the tracked character's opinion of the target character.\n@imho_pov_opinion_2!\n\nClick the button again to stop tracking opinion for that character. You can only track a single character's opinions at the same time."
+
+game_concept_imho_player_personality: "Player Personality"
+game_concept_imho_player_personality_desc: "Display your character's [personality|E] archetype.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n@imho_pov_opinion_3!"
+
+# PoW
+
+game_concept_pow_gather_commanders: "Gather Commanders"
+game_concept_pow_gather_commanders_desc: "For the player, a character can only be assigned as [commander|E] if they are in the same location as the army they are being assigned to. If that is not the case, the "Select new Commander" window will show a Gather Commander button estimating their travel time to the army. Using the button starts a travel towards the army, and upon arrival, the character will be assigned as [commander|E].\n\nShould the [commander|E] be removed from command for any reason, they will start a travel back home. If they have prisoners in transit, they will first travel to their liege's court to transfer the prisoners to the dungeons.\n\nBy default, travel events do not happen on those travels, but they can be enabled with the proper setting."
+
+game_concept_pow_prisoner_transit: "Prisoner Transit"
+game_concept_pow_prisoner_transit_desc: "When captured, either during a battle, a siege or a raid, prisoners will stay with the [commander|E] that captured them. As a consequence, armies without [commanders|E] can no longer take prisoners.\n\nWhen the army reaches its owner's capital province, prisoners are transferred to the dungeons.\n\nWhen an army is defeated in battle, they are transferred to the ennemy [commander|E].\n\nShould a [commander|E] die, or the army being beaten by an army without a [commander|E], prisoners will be liberated and start their journey home (even if [pow_prisoner_release_travel|E] is set to Off)."
+
+game_concept_pow_prisoner_release_travel: "Prisoner Release Travel"
+game_concept_pow_prisoner_release_travel_desc: "Upon being released (or escaping), prisoners start a travel home. A setting enables restricting this features to [prisoners_of_war|E] to alleviate the performance cost, should it become an issue.\n\nThe default setting blocks all travel events for returning prisoners, but those can be enabled with the proper setting."

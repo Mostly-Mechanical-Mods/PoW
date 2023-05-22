@@ -9,19 +9,11 @@ LTAF_error_suppression.0001 = {
 	}
 
 	immediate = {	
-		fix_variable_error = { X = debug }
-		fix_variable_error = { X = story_army }
-		fix_variable_error = { X = distinguished_PoW }
-		fix_variable_error = { X = story_PoW_list }
-		fix_variable_error = { X = story_PoW }
 		fix_variable_error = { X = PoW_army_window }
-		fix_variable_error = { X = block_home }
-		fix_variable_error = { X = commander_gather_eta }
-		fix_variable_error = { X = commander }
-		fix_variable_error = { X = block_vanilla_on_actions }
-		fix_variable_error = { X = block_customize }
 		fix_variable_error = { X = distinguished_PoW }
 		fix_variable_error = { X = commander_gather_eta }
-		fix_variable_error = { X = block_customize }
+		fix_variable_error = { X = block_travel_plan_customize_button }
+		fix_variable_error = { X = block_travel_plan_home_button }
+		fix_variable_error = { X = PoW_prisoner_release }
 	}
 }

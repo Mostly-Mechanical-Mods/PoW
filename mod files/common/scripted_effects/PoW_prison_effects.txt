@@ -1,0 +1,182 @@
+﻿# gated behind PoW_is_loaded_prisoner_transit_enabled = yes
+PoW_prisoner_of_war_capture_effect = {
+	if = {
+		limit = { NOT = { exists = scope:battle_loc }}
+		if = {
+			limit = { exists = scope:raider }
+			root.location = { save_scope_as = battle_loc }
+		}
+		else_if = {
+			limit = { exists = scope:army }
+			scope:army.location = { save_scope_as = battle_loc }
+		}
+		else_if = {
+			limit = { exists = scope:barony }
+			scope:barony.title_province = { save_scope_as = battle_loc }
+		}
+		else = {
+			scope:new_target.location = { save_scope_as = battle_loc }
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:army }}
+		if = {
+			limit = { exists = scope:raider }
+			root = { save_scope_as = army }
+		}
+		else = {
+			scope:battle_loc = {
+				ordered_army_in_location = {
+					limit = {
+						army_owner = scope:imprisoner
+						exists = army_commander
+					}
+					order_by = army_size
+					save_scope_as = army
+				}
+			}
+		}
+	}
+	if = {
+		limit = { PoW_debug = yes }
+		debug_log = "dbg_log prisoner_of_war_capture_effect"
+		debug_log_scopes = no
+		scope:new_target = { debug_log = "new_target: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+		scope:imprisoner = { debug_log = "imprisoner: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+		scope:battle_loc ?= { debug_log = "battle loc: [THIS.Province.GetNameNoTooltip]" }
+		scope:army ?= { debug_log = "army: [THIS.Army.GetNameNoTooltip]" }
+	}
+	scope:army ?= {
+		if = {
+			limit = { exists = army_commander }
+			army_owner ?= {
+				scope:imprisoner = {
+					imprison = {
+						target = scope:new_target
+						type = prisoner_of_war
+					}
+				}
+				scope:new_target = {
+					set_location = scope:battle_loc
+					set_variable = {
+						name = PoW
+						value = scope:army.army_commander
+					}
+				}
+			}
+			army_commander = {
+				if = {
+					limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+					create_story = PoW_commander_story
+				}
+				add_to_variable_list = {
+					name = PoW
+					target = scope:new_target
+				}
+			}
+		}
+	}
+}
+
+# PoW_prisoner_travel_home = {
+# 	if = {
+# 		limit = { PoW_debug = yes }
+# 		debug_log = "PoW_prisoner_travel_home"
+# 		$PRISONER$ = { debug_log = "Prisoner [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+# 		$STARTING_LOCATION$ = { debug_log = "PoW Current Location [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]" }
+# 	}
+# 	if = {
+# 		limit = { scope:prisoner.location != $CURRENT_LOC$ }
+# 		$PRISONER$ = {
+# 			location = { save_scope_as = PoW_destination_loc }
+# 			if = {
+# 				limit = { PoW_debug = yes }
+# 				scope:PoW_destination_loc = {
+# 					debug_log = "start travel plan to [THIS.Province.GetID] [THIS.Province.GetNameNoTooltip]"
+# 				}
+# 			}
+# 			set_location = { location = $POW_CURRENT_LOC$ stick_to_location = yes }
+# 			start_travel_plan = {
+# 				destination = scope:PoW_destination_loc
+# 				players_use_planner = no
+# 				return_trip = no
+# 			}
+# 		}
+# 	}
+# 	else_if = {
+# 		limit = { PoW_debug = yes }
+# 		$PRISONER$.location = { debug_log = "No travel required to [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+# 	}
+# }
+
+PoW_ransom_interaction_effect_setup = {
+	# scope:prisoner.location = { save_scope_as = PoW_current_loc }
+	# if = {
+	# 	limit = {
+	# 		OR = {
+	# 			has_game_rule = PoW_prisoner_release_travel_PoW
+	# 			has_game_rule = PoW_prisoner_release_travel_PoW_events
+	# 		}
+	# 		scope:prisoner = { is_in_prison_type = prisoner_of_war }
+	# 	}
+	# 	scope:prisoner = {
+	# 		set_variable = {
+	# 			name = PoW_prisoner_release_travel_PoW
+	# 			value = yes
+	# 			days = 1
+	# 		}
+	# 	}
+	# }
+}
+
+# PoW_ransom_interaction_effect = {
+# 	if = {
+# 		limit = { PoW_debug = yes }
+# 		debug_log = "PoW_pay_ransom_interaction_on_accept"
+# 		scope:prisoner = { debug_log = "Prisoner: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+# 		scope:imprisoner = { debug_log = "Imprisoner: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+# 		scope:payer = { debug_log = "Payer: [THIS.Char.GetID] [THIS.Char.GetNameNoTooltip]" }
+# 	}
+# 	if = {
+# 		limit = { exists = scope:PoW_release_travel_home }
+# 		PoW_prisoner_travel_home = {
+# 			PRISONER = scope:prisoner
+# 			CURRENT_LOC = scope:PoW_current_loc
+# 		}
+# 	}
+# }
+
+PoW_release_from_prison_interaction_on_accept_setup = {
+	# if = {
+	# 	limit = {
+	# 		scope:banish = no
+	# 		OR = {
+	# 			has_game_rule = PoW_prisoner_release_travel_PoW
+	# 			has_game_rule = PoW_prisoner_release_travel_PoW_events
+	# 		}
+	# 		scope:prisoner = { is_in_prison_type = prisoner_of_war }
+	# 	}
+	# 	scope:prisoner = {
+	# 		set_variable = {
+	# 			name = PoW_prisoner_release_travel_PoW
+	# 			value = yes
+	# 			days = 1
+	# 		}
+	# 	}
+	# }
+}
+
+PoW_release_from_prison_interaction_on_accept = {
+	# if = {
+	# 	limit = { PoW_debug = yes }
+	# 	debug_log = "PoW_release_from_prison_interaction_on_accept"
+	# 	debug_log_scopes = yes
+	# }
+	# if = {
+	# 	limit = { exists = scope:PoW_current_loc }
+	# 	PoW_prisoner_travel_home = {
+	# 		PRISONER = scope:recipient
+	# 		CURRENT_LOC = scope:PoW_current_loc
+	# 	}
+	# }
+}

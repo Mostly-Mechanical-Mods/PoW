@@ -307,7 +307,7 @@ types PoW {
 				size = { 380 180 }
 				scrollwidget = {
 					dynamicgridbox = {
-						datamodel = "[Army.MakeScope.Var('story_PoW').GetList('story_PoW_list')]"
+						datamodel = "[Army.GetCommander.MakeScope.GetList('PoW')]"
 						item = {
 							flowcontainer = {
 								datacontext = "[Scope.GetCharacter]"
@@ -354,15 +354,15 @@ types PoW {
 	type PoW_in_army = hbox
 	{
 		name = "PoW"
-		visible = "[Army.MakeScope.Var('story_PoW').IsSet]"
+		visible = "[GreaterThan_int32(GetDataModelSize(Army.GetCommander.MakeScope.GetList('Pow')),'(int32)0')]"
 		icon = {
 			name = "PoW"
 			texture = "gfx/interface/icons/portraits/punishment.dds"
 			size = { 35 35 }
 		}
 		text_single = {
-			name = "attrition"
-			text = "[GetDataModelSize(Army.MakeScope.Var('story_PoW').GetList('story_PoW_list'))|#V]"
+			name = "PoW"
+			text = "[GetDataModelSize(Army.GetCommander.MakeScope.GetList('Pow'))|#V]"
 		}
 		tooltipwidget = { PoW_in_army_tooltip = {} }
 		using = tooltip_ne
@@ -370,7 +370,7 @@ types PoW {
 
 	type PoW_in_unit_icon = widget
 	{
-		visible = "[GreaterThan_int32(GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.Var('commander_story').GetList('PoW')),'(int32)0')]"
+		visible = "[GreaterThan_int32(GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.GetList('PoW')),'(int32)0')]"
 		size = { 20 20 }
 
 		icon = {
@@ -392,7 +392,7 @@ types PoW {
 				size = { 380 180 }
 				scrollwidget = {
 					dynamicgridbox = {
-						datamodel = "[UnitItem.GetArmy.GetCommander.MakeScope.Var('commander_story').GetList('PoW')]"
+						datamodel = "[UnitItem.GetArmy.GetCommander.MakeScope.GetList('PoW')]"
 						item = {
 							flowcontainer = {
 								datacontext = "[Scope.GetCharacter]"
@@ -431,7 +431,7 @@ types PoW {
 		spacing = 4
 		hbox = {
 			layoutpolicy_horizontal = expanding
-			visible = "[GreaterThan_int32(GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.Var('commander_story').GetList('PoW')),'(int32)0')]"
+			visible = "[GreaterThan_int32(GetDataModelSize(UnitItem.GetArmy.GetCommander.MakeScope.GetList('PoW')),'(int32)0')]"
 			tooltipwidget = { PoW_in_unit_tooltip = {} }
 			margin_left = 4
 

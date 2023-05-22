@@ -17,17 +17,29 @@ PoW_appoint_commander = {
 	effect = {
 		start_travel_plan = { 
 			destination = scope:army.location
-			travel_leader = this
 			players_use_planner = no
 			return_trip = no
 		}
 		current_travel_plan = {
-			set_variable = PoW_commander_gather
+			set_variable = block_travel_plan_home_button
+			set_variable = block_travel_plan_customize_button
+			set_variable = PoW_gather_commanders
+			add_travel_plan_modifier = PoW_gather_commanders
 			set_variable = {
 				name = army
 				value = scope:army
 			}
 			save_scope_as = travel_plan
+			set_variable = PoW_gather_commanders
+			if = {
+				limit = { NOT = { has_game_rule = PoW_gather_commanders_enabled_travel_events }}
+				set_variable = FF_vanilla_on_travel_plan_movement_blocker
+				set_variable = FF_vanilla_on_travel_plan_arrival_blocker
+				set_variable = FF_vanilla_on_travel_plan_start_blocker
+				set_variable = FF_vanilla_on_travel_plan_complete_blocker
+				set_variable = FF_vanilla_on_travel_plan_abort_blocker
+				set_variable = FF_vanilla_on_travel_leader_removed_blocker
+			}
 		}
 		scope:army = {
 			set_variable = {
@@ -78,17 +90,29 @@ PoW_button_army_merge_before = {
 	saved_scopes = { army }
 	is_valid = { PoW_is_loaded = yes }
 	effect = {
-		scope:army.location = {
-			every_army_in_location = {
-				limit = {
-					army_owner = root
-					NOT = { this = scope:army }
-				}
-				army_commander ?= {
-					set_variable = merge_commander
-				}
-			}
-		}
+		# if = {
+		# 	limit = { exists = scope:army.army_commander }
+		# 	set_variable = {
+		# 		name = PoW_army_commander_select
+		# 		value = scope:army.army_commander
+		# 	}
+		# }
+		# scope:army.location = {
+		# 	every_army_in_location = {
+		# 		limit = {
+		# 			army_owner = root
+		# 			NOT = { this = scope:army }
+		# 		}
+		# 		army_commander ?= {
+		# 			root = {
+		# 				add_to_variable_list = {
+		# 					name = merge_commanders
+		# 					target = prev
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
 	}
 }
 
@@ -98,30 +122,34 @@ PoW_button_army_merge_after = {
 	saved_scopes = { army }
 	is_valid = { PoW_is_loaded = yes }
 	effect = {
-		scope:army = {
-			if = {
-				limit = {
-					exists = root.var:PoW_army_commander_select
-					NOT = { scope:army.army_commander ?= root.var:PoW_army_commander_select }
-				}
-				if = {
-					limit = { exists = scope:army_commander }
-					remove_commander = yes
-					scope:army_commander.var:commander_story ?= { end_story = yes }
-				}
-				assign_commander = root.var:PoW_army_commander_select
-			}
-		}
-		scope:army.location = {
-			every_character_in_location = {
-				limit = { has_variable = merge_commander }
-				remove_variable = merge_commander
-				if = {
-					limit = { NOT = { exists = commanding_army }}
-					var:commander_story ?= { end_story = yes }
-				}
-			}
-		}
+		# scope:army = {
+		# 	if = {
+		# 		limit = {
+		# 			exists = root.var:PoW_army_commander_select
+		# 			NOT = { scope:army.army_commander ?= root.var:PoW_army_commander_select }
+		# 		}
+		# 		if = {
+		# 			limit = { exists = scope:army.army_commander }
+		# 			remove_commander = yes
+		# 			assign_commander = root.var:PoW_army_commander_select
+		# 		}
+		# 	}
+		# }
+		# every_in_list = {
+		# 	variable = merge_commanders
+		# 	limit = { is_commanding_army = no }
+		# 	set_location = scope:army.location
+		# 	var:commander_story ?= { end_story = yes }
+		# }
+		# if = {
+		# 	limit = {
+		# 		any_in_list = {
+		# 			variable = merge_commanders
+		# 			count > 0
+		# 		}
+		# 	}
+		# 	clear_variable_list = merge_commanders
+		# }
 	}
 }
 
@@ -173,13 +201,13 @@ PoW_commander_show = {
 			location = { add_to_list = starting_location }
 		}
 		every_courtier_or_guest = {
-			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
+			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root } is_ai = yes }
 			remove_variable = commander_gather_eta
 			add_to_list = gathering_commanders
 			location = { add_to_list = starting_location }
 		}
 		every_vassal = {
-			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root }}
+			limit = { can_be_commander_now_trigger = { ARMY_OWNER = root } is_ai = yes }
 			remove_variable = commander_gather_eta
 			add_to_list = gathering_commanders
 			location = { add_to_list = starting_location }
@@ -201,6 +229,7 @@ PoW_commander_show = {
 						players_use_planner = no
 						return_trip = no
 					}
+					current_travel_plan = { add_travel_plan_modifier = PoW_gather_commanders }
 				}
 			}
 			every_in_list = {
@@ -244,12 +273,14 @@ PoW_raise_all_after = {
 
 PoW_disband_all = {
 	scope = character
-	is_valid = { PoW_is_loaded = yes }
 	effect = {
 		every_army = {
 			army_commander ?= {
 				if = {
-					limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+					limit = {
+						PoW_is_loaded_gather_commanders_enabled = yes
+						NOT = { owns_story_of_type = PoW_commander_story }
+					}
 					create_story = PoW_commander_story
 				}
 				var:commander_story ?= { end_story = yes }
@@ -260,14 +291,16 @@ PoW_disband_all = {
 
 PoW_army_disband = {
 	scope = army
-	is_valid = { PoW_is_loaded_gather_commanders_enabled = yes }
 	effect = {
 		army_commander ?= {
 			if = {
-				limit = { NOT = { owns_story_of_type = PoW_commander_story }}
+				limit = {
+					PoW_is_loaded_gather_commanders_enabled = yes
+					NOT = { owns_story_of_type = PoW_commander_story }
+				}
 				create_story = PoW_commander_story
 			}
-			var:commander_story = { end_story = yes }
+			var:commander_story ?= { end_story = yes }
 		}
 	}
 }

@@ -1,25 +1,14 @@
-﻿PoW_travel_plan_on_actions_blocker = {
-	OR = {
-		is_commanding_army = yes
-		is_imprisoned = yes
-		current_travel_plan ?= { has_variable = PoW_commander_gather }
-		has_variable = PoW_commander_gather
-	}
-}
-
-PoW_can_be_commander_now_trigger = {
+﻿PoW_can_be_commander_now_trigger = {
 	trigger_if = {
 		limit  = { is_travelling = yes }
 		save_temporary_scope_as = PoV
 		current_travel_plan = {
-			OR = {
-				has_variable = PoW_commander_gather
-				current_location = {
-					any_army_in_location = {
-						OR = {
-							army_owner = scope:PoV
-							army_owner = scope:PoV.liege_or_court_owner
-						}
+			has_variable = PoW_gather_commanders
+			current_location = {
+				any_army_in_location = {
+					OR = {
+						army_owner = scope:PoV
+						army_owner = scope:PoV.liege_or_court_owner
 					}
 				}
 			}

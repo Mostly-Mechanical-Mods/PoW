@@ -21,12 +21,16 @@
 
 PoW_gather_commanders = {
 	categories = {
-		mod_toggle mostly_mechanical_mods mmm_pow
+		mostly_mechanical_mods mmm_pow
 	}
 
 	default = PoW_gather_commanders_enabled
 
 	PoW_gather_commanders_enabled = {
+		flag = GG_can_change_rule
+	}
+
+	PoW_gather_commanders_enabled_travel_events = {
 		flag = GG_can_change_rule
 	}
 
@@ -37,7 +41,7 @@ PoW_gather_commanders = {
 
 PoW_prisoner_transit = {
 	categories = {
-		mod_toggle mostly_mechanical_mods mmm_pow
+		mostly_mechanical_mods mmm_pow
 	}
 
 	default = PoW_prisoner_transit_enabled
@@ -51,19 +55,26 @@ PoW_prisoner_transit = {
 	}
 }
 
+PoW_prisoner_release = {
+	categories = {
+		mostly_mechanical_mods mmm_pow
+	}
 
-# PoW_01_achievement = {
-# 	categories = {
-# 		GG_achievement
-# 	}
+	default = PoW_prisoner_release_travel_all
 
-# 	default = PoW_01_achievement_locked
+	PoW_prisoner_release_travel_all = {
+		flag = GG_can_change_rule
+	}
 
-# 	PoW_01_achievement_locked = {
-# 		flag = GG_achievement
-# 	}
+	PoW_prisoner_release_travel_all_events = {
+		flag = GG_can_change_rule
+	}
 
-# 	PoW_01_achievement_unlocked = {
-# 		flag = GG_achievement
-# 	}
-# }
+	PoW_prisoner_release_travel_PoW = {
+		flag = GG_can_change_rule
+	}
+
+	PoW_prisoner_release_travel_PoW_events = {
+		flag = GG_can_change_rule
+	}
+}

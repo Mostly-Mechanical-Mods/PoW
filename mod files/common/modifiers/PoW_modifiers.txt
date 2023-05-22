@@ -11,3 +11,8 @@ prisoner_of_war_travel = {
 	icon = prison_negative
 	travel_speed_mult = -100
 }
+
+PoW_gather_commanders = {
+	icon = travel_speed_good
+	travel_speed_mult = 0.5
+}

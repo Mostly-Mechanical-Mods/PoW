@@ -1,0 +1,117 @@
+﻿
+commander_base_court_position = {
+	max_available_positions = 2
+	category = court_position_category_commander
+
+	opinion = {
+		value = regular_court_position_opinion
+	}
+	
+	# How high the aptitude has to be to reach the 5 different modifier levels
+	aptitude_level_breakpoints = { 20 40 60 80 }
+
+	# How good is this character in this position? root scope is the holder of the court position
+	aptitude = {
+		value = 1
+		add = {
+			value = martial
+			multiply = 1.75
+			max = 50
+			desc = court_position_skill_learning
+		}
+		
+		add = court_position_aptitude_family_business_value
+		add = court_position_aptitude_low_penalty_value
+	}
+
+	is_shown = { }
+
+	# Is this an available position for this court? (root is court owner)
+	valid_position = {
+		is_ai = no
+		highest_held_title_tier >= tier_county
+	}
+
+	is_shown_character = {
+		scope:employee = {
+			highest_held_title_tier <= tier_barony
+			is_imprisoned = no
+		}
+	}
+
+
+	valid_character = {
+	}
+
+	revoke_cost = {
+		
+	}
+
+	salary = {
+	}
+
+	# These modifiers are employed based on what level the aptitude reaches (levels are defined as breakpoints) 
+	scaling_employer_modifiers = {
+		aptitude_level_1 = {
+			movement_speed = 0.02
+		}
+		aptitude_level_2 = {
+			movement_speed = 0.04
+		}
+		aptitude_level_3 = {
+			movement_speed = 0.06
+		}
+		aptitude_level_4 = {
+			movement_speed = 0.08
+		}
+		aptitude_level_5 = {
+			movement_speed = 0.10
+		}
+	}
+
+	custom_employer_modifier_description = commander_employer_custom_effect_description
+
+	modifier = {
+	}
+
+	custom_employee_modifier_description = courtcommander_employee_custom_effect_description_physician_employee_custom_effect_description
+
+	on_court_position_received = {
+		
+	}
+	on_court_position_revoked = { 
+		
+	}
+	on_court_position_invalidated = {
+		
+	}
+
+	search_for_courtier = {
+		
+	}
+
+	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
+	candidate_score = {
+        value = 150
+        add = scope:base_value
+        add = court_position_candidate_score_base_value
+        add = court_position_candidate_aptitude_value
+		# No debt considerations for Physicians, they are too important
+        # AI is less likely to fire the court physician, unless they have a better candidate.
+        if = {
+            limit = {
+                exists = scope:firing_court_position
+            }
+            add = 200
+            scope:employee = {
+                # Does the liege have a better candidate that they should be hiring instead?
+                if = {
+                    limit = {
+                        scope:highest_available_aptitude > scope:employee_aptitude
+                    }
+                    add = -150
+                }
+            }
+        }
+    }
+}
