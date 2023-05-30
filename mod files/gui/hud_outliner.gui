@@ -546,18 +546,17 @@ types Outliner {
 				hbox = {
 
 					layoutpolicy_horizontal = expanding
-					margin = { 3 0 }
+					margin = { 10 0 }
 
-					
 					icon = {
 						texture = "[Army.GetArmyStatusOutlinerIcon]"
 						size = { 50 50 }
 
 						tooltip = "[Army.GetArmyStatusTooltip]"
 						using = tooltip_ws
-						
 					}
-				
+
+					
 					vbox = {
 						name = "army_info"
 						layoutpolicy_horizontal = expanding
