@@ -356,12 +356,12 @@ types PoW {
 		name = "PoW"
 		visible = "[GreaterThan_int32(GetDataModelSize(Army.GetCommander.MakeScope.GetList('Pow')),'(int32)0')]"
 		icon = {
-			name = "PoW"
+			name = "PoW_icon"
 			texture = "gfx/interface/icons/portraits/punishment.dds"
 			size = { 35 35 }
 		}
 		text_single = {
-			name = "PoW"
+			name = "PoW_list_size"
 			text = "[GetDataModelSize(Army.GetCommander.MakeScope.GetList('Pow'))|#V]"
 		}
 		tooltipwidget = { PoW_in_army_tooltip = {} }

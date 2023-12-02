@@ -26,3 +26,7 @@ PoW_v1_1_2_changelog: "#bold PoW v1.1.2#!"
 PoW_v1_1_2_changelog_patch: "No patch is necessary on your current savegame."
 PoW_v1_1_2_changelog_1: "Updated for Lance 1.9.1"
 PoW_v1_1_2_changelog_2: "Fixed the Raise All Armies hud button not raising all armies"
+
+PoW_v1_1_3_changelog: "#bold PoW v1.1.3#!"
+PoW_v1_1_3_changelog_patch: "No patch is necessary on your current savegame."
+PoW_v1_1_3_changelog_1: "Updated for Peacock 1.11.2"

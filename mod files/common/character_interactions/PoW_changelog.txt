@@ -11,7 +11,7 @@
 
 	is_shown = {
 		scope:actor = scope:recipient
-		NOT = { has_global_variable = PoW_v1_1_2 }
+		NOT = { has_global_variable = PoW_v1_1_3 }
 	}
 
 	is_valid_showing_failures_only = {
@@ -30,7 +30,7 @@
 	}
 
 	on_send = {
-		set_global_variable = PoW_v1_1_2
+		set_global_variable = PoW_v1_1_3
 	}
 
 	on_auto_accept = {
@@ -42,6 +42,16 @@
 		every_in_list = {
 			list = debug
 			custom = PoW_changelog_alert_introduction
+		}
+		if = {
+			limit = { NOT = { has_global_variable = PoW_v1_1_3 }}
+			every_in_list = {
+				list = debug
+				custom = PoW_v1_1_3_changelog
+				custom_tooltip = PoW_v1_1_3_changelog_patch
+				custom_tooltip = PoW_v1_1_3_changelog_1
+				custom_tooltip = PoW_v1_1_3_changelog_2
+			}
 		}
 		if = {
 			limit = { NOT = { has_global_variable = PoW_v1_1_2 }}
